@@ -1,5 +1,7 @@
 package net.wohlfart.neutron.scene.graph;
 
+import net.wohlfart.neutron.scene.ICamera;
+
 import com.badlogic.gdx.math.Frustum;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
@@ -10,7 +12,7 @@ import com.badlogic.gdx.math.Vector3;
  *
  * @author mwohlf
  */
-class Camera {
+class Camera implements ICamera {
 
 	public final Vector3 position = new Vector3(0, 0, 0);
 
@@ -58,7 +60,7 @@ class Camera {
 		return projection;
 	}
 
-	public Matrix4 getCombined() {
+	public Matrix4 getViewMatrix() {
 		return combined;
 	}
 
@@ -74,11 +76,11 @@ class Camera {
 		return viewportHeight;
 	}
 
-	public void setViewportWidth(int width) {
-		viewportWidth = width;
-	}
-
-	public void setViewportHeight(int height) {
+	@Override
+	public void resizeViewport(int width, int height) {
+		viewportWidth = width;		
 		viewportHeight = height;
+		update();
 	}
+	
 }

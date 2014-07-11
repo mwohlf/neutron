@@ -7,6 +7,7 @@ import net.wohlfart.neutron.scene.IRenderContext;
 import net.wohlfart.neutron.scene.ITree;
 import net.wohlfart.neutron.scene.graph.NodeSortStrategy;
 import net.wohlfart.neutron.scene.graph.NodeSortStrategy.ISortToken;
+import net.wohlfart.neutron.scene.util.ShaderLoader;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -44,7 +45,7 @@ public class Skybox implements IEntity {
 	public void register(IGraph graph) {
 		this.graph = graph;
 		createSides();
-		loadShader("skybox");
+		shader = ShaderLoader.load("skybox");
 		graph.add(this);
 		for (Side side : sides) {
 			graph.add(side);
@@ -60,15 +61,6 @@ public class Skybox implements IEntity {
 				new Side("right", new Texture(Gdx.files.internal(path + "/" + "right1.png")), new Vector3(+1f, 0f, 0f).nor()),
 				new Side("left", new Texture(Gdx.files.internal(path + "/" + "left2.png")), new Vector3(-1f, 0f, 0f).nor()),
 		};
-	}
-
-	private void loadShader(String name) {
-		shader = new ShaderProgram(
-				Gdx.files.internal("shader/" + name + ".vert").readString("UTF-8"),
-				Gdx.files.internal("shader/" + name + ".frag").readString("UTF-8"));
-		if (!shader.isCompiled()) {
-			throw new IllegalStateException("shader not compiled: " + shader.getLog());
-		}
 	}
 
 	@Override
@@ -127,7 +119,7 @@ public class Skybox implements IEntity {
 		@Override
 		public void render(IRenderContext ctx, Iterable<ITree<INode>> children) {
 			shader.begin();
-			shader.setUniformMatrix("u_worldToClip", graph.getViewMatrix());
+			shader.setUniformMatrix("u_worldToClip", ctx.getCamera().getViewMatrix());
 			shader.setUniformMatrix("u_modelToWorld", matrix);
 			Gdx.gl20.glEnable(GL20.GL_TEXTURE_2D);
 			texture.bind(0);

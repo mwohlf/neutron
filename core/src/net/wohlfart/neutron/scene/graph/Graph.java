@@ -3,14 +3,14 @@ package net.wohlfart.neutron.scene.graph;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.wohlfart.neutron.scene.ICamera;
 import net.wohlfart.neutron.scene.IGraph;
 import net.wohlfart.neutron.scene.IRenderCache;
 import net.wohlfart.neutron.scene.IRenderContext;
 import net.wohlfart.neutron.scene.ITree;
 import net.wohlfart.neutron.scene.IUpdateable;
-import net.wohlfart.neutron.scene.node.Root;
+import net.wohlfart.neutron.scene.node.RootNode;
 
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 
@@ -20,26 +20,18 @@ public class Graph implements IGraph, IUpdateable {
 
 
 	/** ordered list of render nodes */
-	private final IRenderCache renderCache = new RenderCache(new Root(this));
+	private final IRenderCache renderCache = new RenderCache(new RootNode());
 
 	/** set or semantic entities in this scene graph */
 	private final Set<IEntity> semanticView = new HashSet<IEntity>();
 
 	// this.spatialView = new TreeImpl<>(new BoundingVolumeSphere(new Vector3d(), 0));
 
-
 	@Override
 	public void setup(IEntity... entities) {
 		for (IEntity entity : entities) {
 			entity.register(this);
 		}
-	}
-
-	@Override
-	public void resizeViewport(int width, int height) {
-		camera.setViewportWidth(width);
-		camera.setViewportHeight(height);
-		camera.update();
 	}
 
 	/**
@@ -87,8 +79,8 @@ public class Graph implements IGraph, IUpdateable {
 	}
 
 	@Override
-	public Matrix4 getViewMatrix() {
-		return camera.getCombined();
+	public ICamera getCamera() {
+		return camera;
 	}
 
 }

@@ -13,36 +13,24 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
 
 public class SimpleNode implements INode {
-	private String id;
-	private ISortToken token;
+	private final String id;
+	private final ISortToken sortToken;
+	private final Matrix4 matrix = new Matrix4();
 
 	private Mesh mesh;
-	private int primFormat; // GL20.GL_TRIANGLE_FAN
+	private int primeFormat; // GL20.GL_TRIANGLE_FAN
 
 	private Texture texture;
 	private ShaderProgram shader;
 
-	private Matrix4 matrix = new Matrix4();
-
-	public SimpleNode(String id, ISortToken token) {
+	public SimpleNode(String id, ISortToken sortToken, Mesh mesh,
+			int primeFormat, ShaderProgram shader, Texture texture) {
 		this.id = id;
-		this.token = token;
-	}
-
-	public SimpleNode withMesh(Mesh mesh, int primFormat) {
+		this.sortToken = sortToken;
 		this.mesh = mesh;
-		this.primFormat = primFormat;
-		return this;
-	}
-
-	public SimpleNode withTexture(Texture texture) {
-		this.texture = texture;
-		return this;
-	}
-
-	public SimpleNode withShader(ShaderProgram shader) {
+		this.primeFormat = primeFormat;
 		this.shader = shader;
-		return this;
+		this.texture = texture;
 	}
 
 	@Override
@@ -52,27 +40,27 @@ public class SimpleNode implements INode {
 
 	@Override
 	public ISortToken getSortToken() {
-		return token;
+		return sortToken;
+	}
+
+	@Override
+	public Matrix4 getModel2World() {
+		return matrix;
 	}
 
 	@Override
 	public void render(IRenderContext ctx, Iterable<ITree<INode>> children) {
 		ctx.begin(shader);
 		Gdx.gl20.glDisable(GL20.GL_CULL_FACE);
-		shader.setUniformMatrix("u_worldToClip", ctx.getViewMatrix());
+		shader.setUniformMatrix("u_worldToClip", ctx.getCamera().getViewMatrix());
 		shader.setUniformMatrix("u_modelToWorld", matrix);
 		if (texture != null) {
 			Gdx.gl20.glEnable(GL20.GL_TEXTURE_2D);
 			texture.bind(0);
 			shader.setUniformi("u_texture", 0);
 		}
-		ctx.render(mesh, primFormat);
+		ctx.render(mesh, primeFormat);
 		ctx.end();
-	}
-
-	@Override
-	public Matrix4 getModel2World() {
-		return matrix;
 	}
 
 }

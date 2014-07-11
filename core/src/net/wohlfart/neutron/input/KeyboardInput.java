@@ -1,19 +1,16 @@
 package net.wohlfart.neutron.input;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-
 import net.wohlfart.neutron.scene.IUpdateable;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.IntMap;
+import com.badlogic.gdx.utils.IntSet;
+import com.badlogic.gdx.utils.IntSet.IntSetIterator;
 
-// Events are dispatched right before the call to ApplicationListener.render()
+// events are dispatched right before the call to ApplicationListener.render()
 public class KeyboardInput implements InputProcessor {
 
 	float MOV_SPEED = 0.7f;
@@ -22,8 +19,8 @@ public class KeyboardInput implements InputProcessor {
 	private Vector3 mov = new Vector3();
 	private Quaternion rot = new Quaternion();
 
-	private final Map<Integer, Command> keyCodes = new HashMap<Integer, Command>();
-	private final Set<Integer> pressedKeys = new HashSet<Integer>();
+	private final IntMap<Command> keyCodes = new IntMap<Command>();
+	private final IntSet pressedKeys = new IntSet();
 
 	public KeyboardInput() {
 		setup();
@@ -44,9 +41,9 @@ public class KeyboardInput implements InputProcessor {
 		keyCodes.put(Input.Keys.S, new Translate(Vector3.X, +MOV_SPEED));
 	}
 
-	public void pull(IUpdateable updateable) {
-		Iterator<Integer> iter = pressedKeys.iterator();
-		while (iter.hasNext()) {
+	public void update(IUpdateable updateable) {
+		IntSetIterator iter = pressedKeys.iterator();
+		while (iter.hasNext) {
 			Command cmd = keyCodes.get(iter.next());
 			if (cmd != null) {
 				cmd.execute();

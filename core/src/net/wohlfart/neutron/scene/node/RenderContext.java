@@ -1,18 +1,19 @@
 package net.wohlfart.neutron.scene.node;
 
-import net.wohlfart.neutron.scene.IGraph;
+import net.wohlfart.neutron.scene.ICamera;
 import net.wohlfart.neutron.scene.IRenderContext;
 
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.math.Matrix4;
 
 public class RenderContext implements IRenderContext {
-	ShaderProgram currentShader;
-	IGraph graph;
 
-	public RenderContext(IGraph graph) {
-		this.graph = graph;
+	private final ICamera camera;
+
+	private ShaderProgram currentShader;
+
+	public RenderContext(ICamera camera) {
+		this.camera = camera;
 	}
 
 	@Override
@@ -23,7 +24,10 @@ public class RenderContext implements IRenderContext {
 
 	@Override
 	public void end() {
-		currentShader.end();
+		if (currentShader != null) {
+			currentShader.end();
+			currentShader = null;
+		}
 	}
 
 	@Override
@@ -32,8 +36,8 @@ public class RenderContext implements IRenderContext {
 	}
 
 	@Override
-	public Matrix4 getViewMatrix() {
-		return graph.getViewMatrix();
+	public ICamera getCamera() {
+		return camera;
 	}
 
 }

@@ -8,6 +8,8 @@ import com.badlogic.gdx.math.Vector3;
 
 public interface IGraph {
 
+	// semantical component in a scene graph may contain nodes that will be rendered
+	// or might just clean the screen
 	public interface IEntity extends IUpdateable {
 
 		/**
@@ -17,7 +19,7 @@ public interface IGraph {
 	    public void update(Quaternion rot, Vector3 mov);
 
 		/**
-		 * callback from the graph, implementation should register their nodes and store the graph reference
+		 * initial callback from the graph, implementation should register their nodes and store the graph reference
 		 * since it is needed in the unregister call
 		 */
 	    public void register(IGraph graph);
@@ -30,6 +32,7 @@ public interface IGraph {
 	}
 
 
+	// renderable element in a scene graph
 	public interface INode extends HasSortToken {
 
 		/**
@@ -46,9 +49,9 @@ public interface IGraph {
 
 		/**
 		 * @return the model to world matrix which includes position, rotation and scaling of this node
+		 * usually needed in the render implementation
 		 */
 		Matrix4 getModel2World();
-
 
 	}
 
@@ -64,9 +67,7 @@ public interface IGraph {
 	void remove(IEntity entity);
 
 	void render(IRenderContext ctx);
-
-	void resizeViewport(int width, int height);
-
-	Matrix4 getViewMatrix();
+	
+	ICamera getCamera();
 
 }

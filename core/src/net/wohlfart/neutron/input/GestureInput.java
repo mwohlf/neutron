@@ -9,22 +9,25 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 public class GestureInput implements GestureListener {
+	private final Quaternion IDT_QUATERNION = new Quaternion().idt();
 
-	float MOV_SPEED = 0.7f;
+	private final float MOV_SPEED = 0.7f;
 
-	float PAN_SPEED = -0.1f;
-	float FLING_SPEED = -0.001f;
-	Quaternion IDT_QUATERNION = new Quaternion().idt();
-
-	private Vector3 mov = new Vector3();
+	private final float PAN_SPEED = -0.1f;
+	private final float FLING_SPEED = -0.001f;
+	
+	private Vector3 mov = new Vector3(0, 0, 0);
 	private Quaternion rot = new Quaternion().idt();
 
+	// tmp  
 	private Quaternion rotx = new Quaternion().idt();
 	private Quaternion roty = new Quaternion().idt();
 
 
+	// TODO: implement state pattern to handle input actions differently depending n the current state
+	// e.g. when rotating a tap causes rotation to stop, when not rotating a tap causes a move...
 
-	public void pull(IUpdateable updateable) {
+	public void update(IUpdateable updateable) {
 		updateable.update(rot, mov);
 		slowdown();
 	}

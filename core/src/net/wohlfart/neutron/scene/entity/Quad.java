@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
-public class Cube extends AbstractEntity {
+public class Quad extends AbstractEntity {
 
 	@Override
 	public INode createNode() {
@@ -22,7 +22,7 @@ public class Cube extends AbstractEntity {
 		    .useShader("default")
 		    .useSize(5f)
 		    .useTexture(new Texture(Gdx.files.internal("badlogic.jpg")))
-			.createCube("cube");
+			.createQuad("quad");
 	}
 
 }
