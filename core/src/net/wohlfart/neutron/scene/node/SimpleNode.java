@@ -3,7 +3,7 @@ package net.wohlfart.neutron.scene.node;
 import net.wohlfart.neutron.scene.IGraph.INode;
 import net.wohlfart.neutron.scene.IRenderContext;
 import net.wohlfart.neutron.scene.ITree;
-import net.wohlfart.neutron.scene.graph.NodeSortStrategy.ISortToken;
+import net.wohlfart.neutron.scene.graph.ISortToken;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;

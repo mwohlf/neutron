@@ -5,8 +5,7 @@ import java.util.Iterator;
 import net.wohlfart.neutron.scene.IGraph.INode;
 import net.wohlfart.neutron.scene.IRenderContext;
 import net.wohlfart.neutron.scene.ITree;
-import net.wohlfart.neutron.scene.graph.NodeSortStrategy;
-import net.wohlfart.neutron.scene.graph.NodeSortStrategy.ISortToken;
+import net.wohlfart.neutron.scene.graph.ISortToken;
 import net.wohlfart.neutron.scene.util.ShaderLoader;
 
 import com.badlogic.gdx.Gdx;
@@ -32,7 +31,7 @@ public class RootNode implements INode {
 
 	@Override
 	public ISortToken getSortToken() {
-		return NodeSortStrategy.NEG_INF_TOKEN;
+		return ISortToken.NEG_INF_TOKEN;
 	}
 
 	@Override

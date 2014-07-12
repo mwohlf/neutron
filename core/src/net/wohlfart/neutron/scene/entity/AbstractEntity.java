@@ -18,23 +18,23 @@ public abstract class AbstractEntity implements IEntity {
 
 	private INode node;
 
-	Vector3 tmpMov = new Vector3();
+	private Vector3 tmpMov = new Vector3();
+	private Quaternion tmRot = new Quaternion();
 
 	public IEntity withPosition(double x, double y, double z) {
-		position.x = x;
-		position.y = y;
-		position.z = z;
+		position.set(x, y, z);
 		return this;
 	}
 	
 	@Override
 	public void update(Quaternion rot, Vector3 mov) {
     	rotation.mulLeft(rot);
-        position.add(rotation.conjugate().transform(tmpMov.set(mov)));
+    	tmRot.set(rotation);
+        position.add(tmRot.conjugate().transform(tmpMov.set(mov)));
 		Matrix4 matrix = node.getModel2World();
 		matrix.idt();
-		matrix.rotate(rotation.conjugate());
-		matrix.translate((float)position.x, (float)position.y, (float)position.z);
+		matrix.rotate(rotation);
+		matrix.translate(position.getX(), position.getY(), position.getZ());
 	}
 
 	@Override

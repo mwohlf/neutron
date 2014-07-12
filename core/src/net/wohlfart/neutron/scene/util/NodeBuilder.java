@@ -3,7 +3,7 @@ package net.wohlfart.neutron.scene.util;
 
 import java.util.Iterator;
 
-import net.wohlfart.neutron.scene.graph.NodeSortStrategy;
+import net.wohlfart.neutron.scene.graph.ISortToken;
 import net.wohlfart.neutron.scene.node.SimpleNode;
 
 import com.badlogic.gdx.graphics.GL20;
@@ -27,6 +27,7 @@ public class NodeBuilder {
 	private CurrentVertex currentVertex = new CurrentVertex();
 	private FloatArray vbo;
 	private ShaderProgram shader;
+	private ISortToken sortToken;
 
 	VertexAttribute position3 = new VertexAttribute(Usage.Position, 3, ShaderProgram.POSITION_ATTRIBUTE);
 	VertexAttribute texture2 = new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE);
@@ -56,6 +57,11 @@ public class NodeBuilder {
 
 	public NodeBuilder useShader(String shaderName) {
 		this.shader = ShaderLoader.load(shaderName);
+		return this;
+	}
+	
+	public NodeBuilder useSortToken(ISortToken sortToken) {
+		this.sortToken = sortToken;
 		return this;
 	}
 
@@ -89,7 +95,7 @@ public class NodeBuilder {
 				attributes);
 		mesh.setVertices(array);
 		return new SimpleNode(
-				id, NodeSortStrategy.ZERO_SORT_TOKEN,
+				id, sortToken,
 				mesh, GL20.GL_TRIANGLE_FAN,
 				shader, texture);
 	}
@@ -125,7 +131,7 @@ public class NodeBuilder {
 				attributes);
 		mesh.setVertices(array);
 		return new SimpleNode(
-				id, NodeSortStrategy.ZERO_SORT_TOKEN,
+				id, sortToken,
 				mesh, GL20.GL_TRIANGLES,
 				shader, texture);
 	}
@@ -225,4 +231,5 @@ public class NodeBuilder {
 
 
 	}
+
 }

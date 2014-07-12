@@ -15,54 +15,10 @@ import java.util.Comparator;
 public class NodeSortStrategy<T extends NodeSortStrategy.HasSortToken> implements Comparator<TreeImpl<T>>, Serializable {
     private static final long serialVersionUID = 1L;
 
-    public static final ISortToken POS_INF_TOKEN
-    	= new SortToken("POS_INF_TOKEN", Double.POSITIVE_INFINITY, false);
-
-    public static final ISortToken NEG_INF_TOKEN
-    	= new SortToken("NEG_INF_TOKEN", Double.NEGATIVE_INFINITY, false);
-
-    public static final ISortToken ZERO_SORT_TOKEN
-    	= new SortToken("ZERO_TOKEN", 0, false);
-
     public interface HasSortToken  {
 
         ISortToken getSortToken();
 
-    }
-
-    public interface ISortToken {
-
-        boolean isTranslucent();
-
-        double getZOrder();
-
-    }
-
-    public static class SortToken implements ISortToken {
-    	final String id;
-    	final double zOrder;
-    	final boolean translucent;
-
-    	SortToken(String id, double zOrder, boolean translucent) {
-    		this.id = id;
-    		this.zOrder = zOrder;
-    		this.translucent = translucent;
-    	}
-
-		@Override
-		public boolean isTranslucent() {
-			return translucent;
-		}
-
-		@Override
-		public double getZOrder() {
-			return zOrder;
-		}
-
-		@Override
-        public String toString() {
-            return id;
-        }
     }
 
     @Override

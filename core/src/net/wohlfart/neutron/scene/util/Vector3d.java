@@ -5,9 +5,12 @@ import com.badlogic.gdx.math.Vector3;
 
 public class Vector3d {
 
-	public double x;
-	public double y;
-	public double z;
+	private double x;
+	private double y;
+	private double z;
+	
+	// lazy on demand calculated
+	private double length2 = Double.NaN;
 
 
 	public Vector3d() {
@@ -20,10 +23,31 @@ public class Vector3d {
 		this.z = z;
 	}
 
+	public float getX() {
+		return (float)x;
+	}
+
+	public float getY() {
+		return (float)y;
+	}
+
+	public float getZ() {
+		return (float)z;
+	}
+	
 	public Vector3d add(Vector3 vec) {
 		this.x += vec.x;
 		this.y += vec.y;
 		this.z += vec.z;
+		length2 = Double.NaN;
+		return this;
+	}
+	
+	public Vector3d set(double x, double y, double z) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		length2 = Double.NaN;
 		return this;
 	}
 
@@ -48,7 +72,15 @@ public class Vector3d {
         this.x = xx;
         this.y = yy;
         this.z = zz;
+		length2 = Double.NaN;
         return this;
+	}
+
+	public double getLength2() {	
+		if (Double.isNaN(length2)) {
+			length2 = x*x + y*y + z*z;
+		}
+		return length2;
 	}
 
 }
