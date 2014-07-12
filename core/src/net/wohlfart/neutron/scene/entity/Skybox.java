@@ -6,6 +6,7 @@ import net.wohlfart.neutron.scene.IGraph.INode;
 import net.wohlfart.neutron.scene.IRenderContext;
 import net.wohlfart.neutron.scene.ITree;
 import net.wohlfart.neutron.scene.graph.ISortToken;
+import net.wohlfart.neutron.scene.graph.NodeSortStrategy;
 import net.wohlfart.neutron.scene.util.ShaderLoader;
 
 import com.badlogic.gdx.Gdx;
@@ -107,7 +108,7 @@ public class Skybox implements IEntity {
 
 		@Override
 		public ISortToken getSortToken() {
-			return ISortToken.POS_INF_TOKEN;
+			return NodeSortStrategy.POS_INF_TOKEN;
 		}
 
 		@Override

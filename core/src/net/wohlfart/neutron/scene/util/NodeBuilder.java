@@ -16,7 +16,18 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.FloatArray;
 
+
+/**
+ * tool for creating vbo data structures
+ *
+ * @author mwohlf
+ */
 public class NodeBuilder {
+
+	// offsets are only calculated in the VertexAttributes constructor...
+	private static final VertexAttribute POSITION3 = new VertexAttribute(Usage.Position, 3, ShaderProgram.POSITION_ATTRIBUTE);
+	private static final VertexAttribute TEXTURE2 = new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE);
+	private static final VertexAttribute NORMAL3 = new VertexAttribute(Usage.Normal, 3, ShaderProgram.NORMAL_ATTRIBUTE);
 
 	private Texture texture;
 	private VertexAttributes attributes;
@@ -29,9 +40,6 @@ public class NodeBuilder {
 	private ShaderProgram shader;
 	private ISortToken sortToken;
 
-	VertexAttribute position3 = new VertexAttribute(Usage.Position, 3, ShaderProgram.POSITION_ATTRIBUTE);
-	VertexAttribute texture2 = new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE);
-	VertexAttribute normal3 = new VertexAttribute(Usage.Normal, 3, ShaderProgram.NORMAL_ATTRIBUTE);
 
 
 	public NodeBuilder useAttributes(VertexAttributes attributes) {
@@ -59,7 +67,7 @@ public class NodeBuilder {
 		this.shader = ShaderLoader.load(shaderName);
 		return this;
 	}
-	
+
 	public NodeBuilder useSortToken(ISortToken sortToken) {
 		this.sortToken = sortToken;
 		return this;
@@ -69,21 +77,25 @@ public class NodeBuilder {
 		float l = size/2f;
 		vbo = new FloatArray(0);
 		addVertex()
-		.has(position3).withPosition(-l,-l, 0)  // bottom left
-		.has(texture2).withTexture(0,1)
-		.has(normal3).withNormal(0,0,1);
+		.withPosition3(-l,-l, 0)  // bottom left
+		.withTexture2(0,1)
+		.withNormal3(0,0,1)
+		;
 		addVertex()
-		.has(position3).withPosition(+l,-l, 0)  // bottom right
-		.has(texture2).withTexture(1,1)
-		.has(normal3).withNormal(0,0,1);
+		.withPosition3(+l,-l, 0)  // bottom right
+		.withTexture2(1,1)
+		.withNormal3(0,0,1)
+		;
 		addVertex()
-		.has(position3).withPosition(+l,+l, 0)  // top right
-		.has(texture2).withTexture(1,0)
-		.has(normal3).withNormal(0,0,1);
+		.withPosition3(+l,+l, 0)  // top right
+		.withTexture2(1,0)
+		.withNormal3(0,0,1)
+		;
 		addVertex()
-		.has(position3).withPosition(-l,+l, 0)  // top left
-		.has(texture2).withTexture(0,0)
-		.has(normal3).withNormal(0,0,1);
+		.withPosition3(-l,+l, 0)  // top left
+		.withTexture2(0,0)
+		.withNormal3(0,0,1)
+		;
 
 		float[] array = new float[vbo.size];
 		for (int i = 0; i < vbo.size; i++) {
@@ -103,7 +115,7 @@ public class NodeBuilder {
 	public SimpleNode createCube(String id) {
 		vbo = new FloatArray(0);
 		float l = size/2f;
-		
+
 		Vector3 v000 = new Vector3(-l,-l,-l);  //      010 ------- 110
 		Vector3 v001 = new Vector3(-l,-l,+l);  //      /|          /|
 		Vector3 v010 = new Vector3(-l,+l,-l);  //     / |         / |
@@ -140,36 +152,34 @@ public class NodeBuilder {
 	private void addQuad(Vector3 v0, Vector3 v1, Vector3 v2, Vector3 v3, Vector3 n) {
 
 		addVertex()
-		.has(position3).withPosition(v0)  // left top 
-		.has(texture2).withTexture(1,1)
-		.has(normal3).withNormal(n);
-		
+		.withPosition3(v0)  // left top 
+		.withTexture2(1,1)
+		.withNormal3(n)
+		;
 		addVertex()
-		.has(position3).withPosition(v1)  // left bottom 
-		.has(texture2).withTexture(1,0)
-		.has(normal3).withNormal(n);
-
+		.withPosition3(v1)  // left bottom 
+		.withTexture2(1,0)
+		.withNormal3(n)
+		;
 		addVertex()
-		.has(position3).withPosition(v2)  // right bottom 
-		.has(texture2).withTexture(0,0)
-		.has(normal3).withNormal(n);
-
+		.withPosition3(v2)  // right bottom 
+		.withTexture2(0,0)
+		.withNormal3(n)
+		;
 		addVertex()
-		.has(position3).withPosition(v3)  // right top 
-		.has(texture2).withTexture(0,1)
-		.has(normal3).withNormal(n);
-
+		.withPosition3(v3)  // right top 
+		.withTexture2(0,1)
+		.withNormal3(n)
+		;
 		addVertex()
-		.has(position3).withPosition(v0)  // left top 
-		.has(texture2).withTexture(1,1)
-		.has(normal3).withNormal(n);
-
+		.withPosition3(v0)  // left top 
+		.withTexture2(1,1)
+		.withNormal3(n)
+		;
 		addVertex()
-		.has(position3).withPosition(v2)  // right bottom 
-		.has(texture2).withTexture(0,0)
-		.has(normal3).withNormal(n);
-
-		
+		.withPosition3(v2)  // right bottom 
+		.withTexture2(0,0)
+		.withNormal3(n);
 	}
 
 	private CurrentVertex addVertex() {
@@ -177,58 +187,61 @@ public class NodeBuilder {
 	}
 
 	class CurrentVertex {
-		boolean doNextCall = true;
-		int offset = 0;
 
 		private CurrentVertex next() {
 			vertexIndex++;
-			this.offset = 0;
 			vbo.ensureCapacity(vertexSize);
 			vbo.addAll(new float[vertexSize], 0, vertexSize);
 			return this;
 		}
 
-		CurrentVertex withPosition(Vector3 v) {
-			withPosition(v.x, v.y, v.z);
+		CurrentVertex withPosition3(Vector3 v) {
+			return withPosition3(v.x, v.y, v.z);
+		}
+
+		CurrentVertex withPosition3(float x, float y, float z) {
+			final int i;
+			if ((i = offset(POSITION3)) > -1) {
+				vbo.set(vertexIndex * vertexSize + i + 0, x);
+				vbo.set(vertexIndex * vertexSize + i + 1, y);
+				vbo.set(vertexIndex * vertexSize + i + 2, z);
+			}
 			return this;
 		}
 
-		CurrentVertex withPosition(float x, float y, float z) {
-			vbo.set(vertexIndex * vertexSize + (offset++), x);
-			vbo.set(vertexIndex * vertexSize + (offset++), y);
-			vbo.set(vertexIndex * vertexSize + (offset++), z);
+		CurrentVertex withTexture2(float s, float t) {
+			final int i;
+			if ((i = offset(TEXTURE2)) > -1) {
+				vbo.set(vertexIndex * vertexSize + i + 0, s);
+				vbo.set(vertexIndex * vertexSize + i + 1, t);
+			}
 			return this;
 		}
 
-		CurrentVertex withTexture(float s, float t) {
-			vbo.set(vertexIndex * vertexSize + (offset++), s);
-			vbo.set(vertexIndex * vertexSize + (offset++), t);
+		CurrentVertex withNormal3(Vector3 v) {
+			return withNormal3(v.x, v.y, v.z);
+		}
+
+		CurrentVertex withNormal3(float x, float y, float z) {
+			final int i;
+			if ((i = offset(NORMAL3)) > -1) {
+				vbo.set(vertexIndex * vertexSize + i + 0, x);
+				vbo.set(vertexIndex * vertexSize + i + 1, y);
+				vbo.set(vertexIndex * vertexSize + i + 2, z);
+			}
 			return this;
 		}
 
-		CurrentVertex withNormal(Vector3 v) {
-			return withNormal(v.x, v.y, v.z);
-		}
-
-		CurrentVertex withNormal(float x, float y, float z) {
-			vbo.set(vertexIndex * vertexSize + (offset++), x);
-			vbo.set(vertexIndex * vertexSize + (offset++), y);
-			vbo.set(vertexIndex * vertexSize + (offset++), z);
-			return this;
-		}
-
-		CurrentVertex has(VertexAttribute attribute) {
+		int offset(VertexAttribute attribute) {
 			Iterator<VertexAttribute> iter = attributes.iterator();
 			while (iter.hasNext()) {
-				if (iter.next().equals(attribute)) {
-					doNextCall = true;
-					return this;
+				VertexAttribute attr = iter.next();
+				if (attr.equals(attribute)) {
+					return attr.offset/4;
 				}
 			}
-			doNextCall = false;
-			return this;
+			return -1;
 		}
-
 
 	}
 

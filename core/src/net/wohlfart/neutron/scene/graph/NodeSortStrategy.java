@@ -14,6 +14,13 @@ import java.util.Comparator;
 //
 public class NodeSortStrategy<T extends NodeSortStrategy.HasSortToken> implements Comparator<TreeImpl<T>>, Serializable {
     private static final long serialVersionUID = 1L;
+    
+    public static final ISortToken POS_INF_TOKEN
+    	= new StaticSortToken(false, Double.POSITIVE_INFINITY, "POS_INF_TOKEN");
+
+    public static final ISortToken NEG_INF_TOKEN
+    	= new StaticSortToken(false, Double.NEGATIVE_INFINITY, "NEG_INF_TOKEN");
+   
 
     public interface HasSortToken  {
 

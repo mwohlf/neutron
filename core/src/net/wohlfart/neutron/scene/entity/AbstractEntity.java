@@ -32,7 +32,7 @@ public abstract class AbstractEntity implements IEntity {
     	rotation.mulLeft(rot);
     	tmRot.set(rotation);
         position.add(tmRot.conjugate().transform(tmpMov.set(mov)));
-		Matrix4 matrix = node.getModel2World();
+		final Matrix4 matrix = node.getModel2World();
 		matrix.idt();
 		matrix.rotate(rotation);
 		matrix.translate(position.getX(), position.getY(), position.getZ());

@@ -3,6 +3,12 @@ package net.wohlfart.neutron.scene.util;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 
+/**
+ * a vector for positions ins solar systems, where float just isn't enough...
+ * 
+ * @author mwohlf
+ *
+ */
 public class Vector3d {
 
 	private double x;
