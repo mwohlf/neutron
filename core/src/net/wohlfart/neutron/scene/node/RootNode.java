@@ -8,8 +8,6 @@ import net.wohlfart.neutron.scene.ITree;
 import net.wohlfart.neutron.scene.graph.ISortToken;
 import net.wohlfart.neutron.scene.util.ShaderLoader;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
 
@@ -41,11 +39,7 @@ public class RootNode implements INode {
 	
 	@Override
 	public void render(IRenderContext ctx, Iterable<ITree<INode>> children) {
-		Gdx.gl.glClearColor(0, 1, 0, 1);
-	    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT
-	    		  | GL20.GL_DEPTH_BUFFER_BIT
-	    		  | GL20.GL_STENCIL_BUFFER_BIT);
-
+	    ctx.setRenderConfig(IRenderConfig.CLEAR);
 	    ctx.begin(shader);
 		shader.setUniformMatrix("u_worldToClip", ctx.getCamera().getViewMatrix());
 	    Iterator<ITree<INode>> iter = children.iterator();

@@ -12,6 +12,8 @@ public class RenderContext implements IRenderContext {
 
 	private ShaderProgram currentShader;
 
+	private IRenderConfig currentConfig = RenderConfigImpl.NULL_CONFIG;
+
 	public RenderContext(ICamera camera) {
 		this.camera = camera;
 	}
@@ -38,6 +40,14 @@ public class RenderContext implements IRenderContext {
 	@Override
 	public ICamera getCamera() {
 		return camera;
+	}
+
+	@Override
+	public void setRenderConfig(IRenderConfig newConfig) {
+		if (!currentConfig.equals(newConfig)) {
+			currentConfig = newConfig.switchValues(currentConfig);
+		}
+		
 	}
 
 }

@@ -25,7 +25,7 @@ public class Cube extends AbstractEntity {
 		    .useShader(SHADER_NAME)
 		    .useSize(5f)
 		    .useTexture(new Texture(Gdx.files.internal("badlogic.jpg")))
-		    .useSortToken(new SortTokenImpl(false, position, SHADER_NAME))
+		    .useSortToken(new SortTokenImpl(false, getPosition(), SHADER_NAME))
 			.createCube("cube");
 	}
 

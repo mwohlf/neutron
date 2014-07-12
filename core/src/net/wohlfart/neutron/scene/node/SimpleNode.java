@@ -51,7 +51,7 @@ public class SimpleNode implements INode {
 	@Override
 	public void render(IRenderContext ctx, Iterable<ITree<INode>> children) {
 		ctx.begin(shader);
-		Gdx.gl20.glDisable(GL20.GL_CULL_FACE);
+		ctx.setRenderConfig(IRenderConfig.DEFAULT_3D);
 		shader.setUniformMatrix("u_worldToClip", ctx.getCamera().getViewMatrix());
 		shader.setUniformMatrix("u_modelToWorld", matrix);
 		if (texture != null) {

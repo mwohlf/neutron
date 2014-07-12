@@ -11,8 +11,9 @@ import com.badlogic.gdx.math.Vector3;
 
 public abstract class AbstractEntity implements IEntity {
 
-	protected final Quaternion rotation = new Quaternion();
-	protected final Vector3d position = new Vector3d();
+	private final Quaternion rotation = new Quaternion();
+
+	private final Vector3d position = new Vector3d();
 	
 	private IGraph graph;
 
@@ -52,6 +53,14 @@ public abstract class AbstractEntity implements IEntity {
 		graph = null;
 	}
 
+	public Quaternion getRotation() {
+		return rotation;
+	}
+
+	public Vector3d getPosition() {
+		return position;
+	}
+	
 	abstract INode createNode();
 
 }
