@@ -1,13 +1,13 @@
 package net.wohlfart.neutron.scene;
 
-import net.wohlfart.neutron.scene.node.IRenderConfig;
+import net.wohlfart.neutron.scene.node.RenderConfigImpl;
 
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 
 // models the state consisting of current shader, view matrix etc.
-public interface IRenderContext<T extends IRenderConfig<T>> {
+public interface IRenderContext {
 
 	void begin(ShaderProgram shader);
 
@@ -17,6 +17,6 @@ public interface IRenderContext<T extends IRenderConfig<T>> {
 
 	ICamera getCamera();
 
-	void setRenderConfig(T newRenderConfig);
+	void setRenderConfig(RenderConfigImpl newRenderConfig);
 
 }
