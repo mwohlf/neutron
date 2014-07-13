@@ -13,8 +13,10 @@ import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.FloatArray;
+import com.badlogic.gdx.utils.ShortArray;
 
 
 /**
@@ -29,16 +31,21 @@ public class NodeBuilder {
 	private static final VertexAttribute TEXTURE2 = new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE);
 	private static final VertexAttribute NORMAL3 = new VertexAttribute(Usage.Normal, 3, ShaderProgram.NORMAL_ATTRIBUTE);
 
-	private Texture texture;
-	private VertexAttributes attributes;
-	private float size;
+	protected Texture texture;
+	protected VertexAttributes attributes;
+	protected float size;
 
-	private int vertexIndex = -1;
-	private int vertexSize = 0;
+	protected Vector3 start;
+	protected Vector3 end;
+
+	private int verticesIndex = -1;
+	protected int vertexSize = 0;
 	private CurrentVertex currentVertex = new CurrentVertex();
-	private FloatArray vbo;
-	private ShaderProgram shader;
-	private ISortToken sortToken;
+	protected ShaderProgram shader;
+	protected ISortToken sortToken;
+
+	protected FloatArray vertices = new FloatArray();
+	protected ShortArray indices = new ShortArray();
 
 
 
@@ -48,7 +55,7 @@ public class NodeBuilder {
 		while (iter.hasNext()) {
 			vertexSize += iter.next().numComponents;
 		}
-		this.vertexIndex = -1;
+		this.verticesIndex = -1;
 		this.attributes = attributes;
 		return this;
 	}
@@ -72,83 +79,38 @@ public class NodeBuilder {
 		this.sortToken = sortToken;
 		return this;
 	}
-
-	public SimpleNode createQuad(String id) {
-		float l = size/2f;
-		vbo = new FloatArray(0);
-		addVertex()
-		.withPosition3(-l,-l, 0)  // bottom left
-		.withTexture2(0,1)
-		.withNormal3(0,0,1)
-		;
-		addVertex()
-		.withPosition3(+l,-l, 0)  // bottom right
-		.withTexture2(1,1)
-		.withNormal3(0,0,1)
-		;
-		addVertex()
-		.withPosition3(+l,+l, 0)  // top right
-		.withTexture2(1,0)
-		.withNormal3(0,0,1)
-		;
-		addVertex()
-		.withPosition3(-l,+l, 0)  // top left
-		.withTexture2(0,0)
-		.withNormal3(0,0,1)
-		;
-
-		float[] array = new float[vbo.size];
-		for (int i = 0; i < vbo.size; i++) {
-			array[i] = vbo.get(i);
-		}
-		Mesh mesh = new Mesh(true, // static
-				(int) (array.length/vertexSize), // maxVertices
-				0, // maxIndices
-				attributes);
-		mesh.setVertices(array);
-		return new SimpleNode(
-				id, sortToken,
-				mesh, GL20.GL_TRIANGLE_FAN,
-				shader, texture);
+	
+	public NodeBuilder useStart(Vector3 start) {
+		this.start = start;
+		return this;
 	}
 
-	public SimpleNode createCube(String id) {
-		vbo = new FloatArray(0);
-		float l = size/2f;
-
-		Vector3 v000 = new Vector3(-l,-l,-l);  //      010 ------- 110
-		Vector3 v001 = new Vector3(-l,-l,+l);  //      /|          /|
-		Vector3 v010 = new Vector3(-l,+l,-l);  //     / |         / |
-		Vector3 v011 = new Vector3(-l,+l,+l);  //   011 ------- 111 |
-		Vector3 v100 = new Vector3(+l,-l,-l);  //    | 000 ------|-100
-		Vector3 v101 = new Vector3(+l,-l,+l);  //    | /         | /  
-		Vector3 v110 = new Vector3(+l,+l,-l);  //    |/          |/
-		Vector3 v111 = new Vector3(+l,+l,+l);  //   001 ------- 101
-
-		addQuad(v101, v111, v011, v001, new Vector3(+0,+0,+1));
-		addQuad(v100, v110, v111, v101, new Vector3(+1,+0,+0));
-		addQuad(v000, v010, v110, v100, new Vector3(+0,+0,-1));
-		addQuad(v001, v011, v010, v000, new Vector3(-1,+0,+0));		
-		addQuad(v110, v010, v011, v111, new Vector3(+0,+1,+0));
-		addQuad(v101, v001, v000, v100, new Vector3(+0,-1,+0)); 	
-
-		float[] array = new float[vbo.size];
-		for (int i = 0; i < vbo.size; i++) {
-			array[i] = vbo.get(i);
-		}
-		assert (array.length % vertexSize == 0);
-		Mesh mesh = new Mesh(true, // static
-				(int) (array.length/vertexSize), // maxVertices
-				0, // maxIndices
-				attributes);
-		mesh.setVertices(array);
-		return new SimpleNode(
-				id, sortToken,
-				mesh, GL20.GL_TRIANGLES,
-				shader, texture);
+	public NodeBuilder useEnd(Vector3 end) {
+		this.end = end;
+		return this;
 	}
 
-
+	private Mesh createMesh() {
+		float[] farray = new float[vertices.size];
+		assert (farray.length % vertexSize == 0);
+		for (int i = 0; i < vertices.size; i++) {
+			farray[i] = vertices.get(i);
+		}
+		Mesh mesh = new Mesh(true, // static
+				(int) (farray.length/vertexSize), // maxVertices
+				indices.size, // maxIndices
+				attributes);
+		mesh.setVertices(farray);
+		if (indices.size > 0) {
+			short[] sarray = new short[indices.size];
+			for (int i = 0; i < indices.size; i++) {
+				sarray[i] = indices.get(i);
+			}
+			mesh.setIndices(sarray);
+		}
+		return mesh;
+	}
+	
 	private void addQuad(Vector3 v0, Vector3 v1, Vector3 v2, Vector3 v3, Vector3 n) {
 
 		addVertex()
@@ -183,56 +145,78 @@ public class NodeBuilder {
 	}
 
 	private CurrentVertex addVertex() {
-		return currentVertex.next();
+		verticesIndex++;
+		vertices.ensureCapacity(vertexSize);
+		vertices.addAll(new float[vertexSize], 0, vertexSize);
+		return currentVertex;
+	}
+	
+	private void addLine(int a, int b) {
+		indices.ensureCapacity(2);
+		indices.add(a);
+		indices.add(b);
+	}
+	
+	// FIXME: need to consider offsets...
+	private void foreachPosition(Transformer transformer) {
+		int count = (int) (vertices.size/vertexSize);
+		for (int i = 0; i < count; i++) {
+			float[] param = {
+					vertices.get(i * vertexSize  + 0),
+					vertices.get(i * vertexSize  + 1),
+					vertices.get(i * vertexSize  + 2),					
+			};
+			transformer.transform(param);
+			vertices.set(i * vertexSize + 0, param[0]);
+			vertices.set(i * vertexSize + 1, param[1]);
+			vertices.set(i * vertexSize + 2, param[2]);						
+		}
 	}
 
-	class CurrentVertex {
+	private interface Transformer {
+		void transform(float[] vertexValues);
+	}
 
-		private CurrentVertex next() {
-			vertexIndex++;
-			vbo.ensureCapacity(vertexSize);
-			vbo.addAll(new float[vertexSize], 0, vertexSize);
-			return this;
-		}
+	private class CurrentVertex {
 
-		CurrentVertex withPosition3(Vector3 v) {
+		private CurrentVertex withPosition3(Vector3 v) {
 			return withPosition3(v.x, v.y, v.z);
 		}
 
-		CurrentVertex withPosition3(float x, float y, float z) {
+		private CurrentVertex withPosition3(float x, float y, float z) {
 			final int i;
 			if ((i = offset(POSITION3)) > -1) {
-				vbo.set(vertexIndex * vertexSize + i + 0, x);
-				vbo.set(vertexIndex * vertexSize + i + 1, y);
-				vbo.set(vertexIndex * vertexSize + i + 2, z);
+				vertices.set(verticesIndex * vertexSize + i + 0, x);
+				vertices.set(verticesIndex * vertexSize + i + 1, y);
+				vertices.set(verticesIndex * vertexSize + i + 2, z);
 			}
 			return this;
 		}
 
-		CurrentVertex withTexture2(float s, float t) {
+		private CurrentVertex withTexture2(float s, float t) {
 			final int i;
 			if ((i = offset(TEXTURE2)) > -1) {
-				vbo.set(vertexIndex * vertexSize + i + 0, s);
-				vbo.set(vertexIndex * vertexSize + i + 1, t);
+				vertices.set(verticesIndex * vertexSize + i + 0, s);
+				vertices.set(verticesIndex * vertexSize + i + 1, t);
 			}
 			return this;
 		}
 
-		CurrentVertex withNormal3(Vector3 v) {
+		private CurrentVertex withNormal3(Vector3 v) {
 			return withNormal3(v.x, v.y, v.z);
 		}
 
-		CurrentVertex withNormal3(float x, float y, float z) {
+		private CurrentVertex withNormal3(float x, float y, float z) {
 			final int i;
 			if ((i = offset(NORMAL3)) > -1) {
-				vbo.set(vertexIndex * vertexSize + i + 0, x);
-				vbo.set(vertexIndex * vertexSize + i + 1, y);
-				vbo.set(vertexIndex * vertexSize + i + 2, z);
+				vertices.set(verticesIndex * vertexSize + i + 0, x);
+				vertices.set(verticesIndex * vertexSize + i + 1, y);
+				vertices.set(verticesIndex * vertexSize + i + 2, z);
 			}
 			return this;
 		}
 
-		int offset(VertexAttribute attribute) {
+		private int offset(VertexAttribute attribute) {
 			Iterator<VertexAttribute> iter = attributes.iterator();
 			while (iter.hasNext()) {
 				VertexAttribute attr = iter.next();
@@ -244,5 +228,105 @@ public class NodeBuilder {
 		}
 
 	}
+
+
+
+	public SimpleNode createQuad(String id) {
+		vertices.clear();
+		float l = size/2f;
+		addVertex()
+		.withPosition3(-l,-l, 0)  // bottom left
+		.withTexture2(0,1)
+		.withNormal3(0,0,1)
+		;
+		addVertex()
+		.withPosition3(+l,-l, 0)  // bottom right
+		.withTexture2(1,1)
+		.withNormal3(0,0,1)
+		;
+		addVertex()
+		.withPosition3(+l,+l, 0)  // top right
+		.withTexture2(1,0)
+		.withNormal3(0,0,1)
+		;
+		addVertex()
+		.withPosition3(-l,+l, 0)  // top left
+		.withTexture2(0,0)
+		.withNormal3(0,0,1)
+		;
+
+		return new SimpleNode(
+				id, sortToken,
+				createMesh(), GL20.GL_TRIANGLE_FAN,
+				shader, texture);
+	}
+
+	public SimpleNode createCube(String id) {
+		vertices.clear();
+		float l = size/2f;
+
+		Vector3 v000 = new Vector3(-l,-l,-l);  //      010 ------- 110
+		Vector3 v001 = new Vector3(-l,-l,+l);  //      /|          /|
+		Vector3 v010 = new Vector3(-l,+l,-l);  //     / |         / |
+		Vector3 v011 = new Vector3(-l,+l,+l);  //   011 ------- 111 |
+		Vector3 v100 = new Vector3(+l,-l,-l);  //    | 000 ------|-100
+		Vector3 v101 = new Vector3(+l,-l,+l);  //    | /         | /  
+		Vector3 v110 = new Vector3(+l,+l,-l);  //    |/          |/
+		Vector3 v111 = new Vector3(+l,+l,+l);  //   001 ------- 101
+
+		addQuad(v101, v111, v011, v001, new Vector3(+0,+0,+1));
+		addQuad(v100, v110, v111, v101, new Vector3(+1,+0,+0));
+		addQuad(v000, v010, v110, v100, new Vector3(+0,+0,-1));
+		addQuad(v001, v011, v010, v000, new Vector3(-1,+0,+0));		
+		addQuad(v110, v010, v011, v111, new Vector3(+0,+1,+0));
+		addQuad(v101, v001, v000, v100, new Vector3(+0,-1,+0)); 	
+
+
+		return new SimpleNode(
+				id, sortToken,
+				createMesh(), GL20.GL_TRIANGLES,
+				shader, texture);
+	}
+	
+
+
+	public SimpleNode createRay(String id) {
+		vertices.clear();
+		indices.clear();
+		
+		addVertex().withPosition3(+0.00f, +0.00f, +1.00f);
+		addVertex().withPosition3(+0.00f, +0.00f, +0.00f);
+		addVertex().withPosition3(+0.02f, +0.02f, +0.90f);
+		addVertex().withPosition3(-0.02f, +0.02f, +0.90f);
+		addVertex().withPosition3(-0.02f, -0.02f, +0.90f);
+		addVertex().withPosition3(+0.02f, -0.02f, +0.90f);
+		
+		final float len = new Vector3(end).sub(start).len();
+		final Matrix4 matrix = new Matrix4().scl(len).rotate(Vector3.Z, end);
+		foreachPosition(
+		    new Transformer() {
+		    	@Override
+		    	public void transform(float[] vertexValues) {
+		    		Vector3 vec = new Vector3(vertexValues[0], vertexValues[1], vertexValues[2]);
+		    		vec.mul(matrix);
+		    		vertexValues[0] = vec.x;
+		    		vertexValues[1] = vec.y;
+		    		vertexValues[2] = vec.z;
+		    	}
+			}
+		); 
+
+		addLine(1, 0);
+		addLine(2, 0);
+		addLine(3, 0);
+		addLine(4, 0);
+		addLine(5, 0);    
+		
+		return new SimpleNode(
+				id, sortToken,
+				createMesh(), GL20.GL_LINES,
+				shader, null);
+	}
+
 
 }

@@ -9,7 +9,8 @@ public interface ISortToken {
     
     String getShaderName();
     
-    // TODO add a state object here we need one anyways to 
-    // setup stae values like back culling, depkth filter, etc...
+    // TODO: add a state object here, we need one anyways to 
+    // setup gl states like back culling, depth filter, stencil stuff, etc...
+    // TODO: add the shader name here to try out different sorting strategies
 
 }

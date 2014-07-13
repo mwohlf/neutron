@@ -1,5 +1,7 @@
 package net.wohlfart.neutron.scene.entity;
 
+import java.util.Set;
+
 import net.wohlfart.neutron.scene.IGraph;
 import net.wohlfart.neutron.scene.IGraph.IEntity;
 import net.wohlfart.neutron.scene.IGraph.INode;
@@ -14,10 +16,10 @@ public abstract class AbstractEntity implements IEntity {
 	private final Quaternion rotation = new Quaternion();
 
 	private final Vector3d position = new Vector3d();
-	
+
 	private IGraph graph;
 
-	private INode node;
+	protected Set<INode> nodes;
 
 	private Vector3 tmpMov = new Vector3();
 	private Quaternion tmRot = new Quaternion();
@@ -26,29 +28,35 @@ public abstract class AbstractEntity implements IEntity {
 		position.set(x, y, z);
 		return this;
 	}
-	
+
 	@Override
 	public void update(Quaternion rot, Vector3 mov) {
-    	rotation.mulLeft(rot);
-    	tmRot.set(rotation);
-        position.add(tmRot.conjugate().transform(tmpMov.set(mov)));
-		final Matrix4 matrix = node.getModel2World();
-		matrix.idt();
-		matrix.rotate(rotation);
-		matrix.translate(position.getX(), position.getY(), position.getZ());
+		rotation.mulLeft(rot);
+		tmRot.set(rotation);
+		position.add(tmRot.conjugate().transform(tmpMov.set(mov)));
+		for (INode node : nodes) {
+			final Matrix4 matrix = node.getModel2World();
+			matrix.idt();
+			matrix.rotate(rotation);
+			matrix.translate(position.getX(), position.getY(), position.getZ());
+		}
 	}
 
 	@Override
 	public void register(IGraph graph) {
-		node = createNode();
 		this.graph = graph;
 		graph.add(this);
-		graph.add(node);
+		initNodes();
+		for (INode node : nodes) {
+			graph.add(node);			
+		}
 	}
 
 	@Override
 	public void unregister() {
-		graph.remove(node);
+		for (INode node : nodes) {
+			graph.remove(node);
+		}
 		graph.remove(this);
 		graph = null;
 	}
@@ -60,7 +68,7 @@ public abstract class AbstractEntity implements IEntity {
 	public Vector3d getPosition() {
 		return position;
 	}
-	
-	abstract INode createNode();
+
+	abstract void initNodes();
 
 }

@@ -1,5 +1,7 @@
 package net.wohlfart.neutron.scene.entity;
 
+import java.util.Collections;
+
 import net.wohlfart.neutron.scene.IGraph.INode;
 import net.wohlfart.neutron.scene.graph.SortTokenImpl;
 import net.wohlfart.neutron.scene.util.NodeBuilder;
@@ -16,8 +18,8 @@ public class Cube extends AbstractEntity {
 	private static final String SHADER_NAME = "default";
 
 	@Override
-	public INode createNode() {
-		return new NodeBuilder()
+	public void initNodes() {
+		nodes = Collections.singleton((INode) new NodeBuilder()
 			.useAttributes(new VertexAttributes(
 					new VertexAttribute(Usage.Position, 3, ShaderProgram.POSITION_ATTRIBUTE),
 					new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE),
@@ -26,7 +28,7 @@ public class Cube extends AbstractEntity {
 		    .useSize(5f)
 		    .useTexture(new Texture(Gdx.files.internal("badlogic.jpg")))
 		    .useSortToken(new SortTokenImpl(false, getPosition(), SHADER_NAME))
-			.createCube("cube");
+			.createCube("cube"));
 	}
 
 }

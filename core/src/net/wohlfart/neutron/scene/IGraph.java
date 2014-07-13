@@ -9,7 +9,8 @@ import com.badlogic.gdx.math.Vector3;
 public interface IGraph {
 
 	// semantical component in a scene graph may contain nodes that will be rendered
-	// or might just clean the screen
+	// or might just clean the screen, note there is no render call into this interface
+	// rendering is done in the node components
 	public interface IEntity extends IUpdateable {
 
 		/**

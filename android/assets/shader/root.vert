@@ -16,6 +16,5 @@ void main(void) {
     // rotate then move the object to its position in the world
     // then from world coord to clip coord
     gl_Position = u_worldToClip * u_modelToWorld * vec4(a_position, 1.0);
-
     
 }

@@ -5,6 +5,7 @@ import net.wohlfart.neutron.scene.ICamera;
 import com.badlogic.gdx.math.Frustum;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.Ray;
 
 /**
  * a camera that always stays at (0,0,0) and looks at (0,0,-1)
@@ -47,12 +48,17 @@ class Camera implements ICamera {
 
 	public void update() {
 		float aspect = viewportWidth / viewportHeight;
+		
 		projection.setToProjection(Math.abs(near), Math.abs(far), fieldOfView, aspect);
+		
 		view.setToLookAt(position, direction, up);
+		
 		combined.set(projection);
 		Matrix4.mul(combined.val, view.val);
+		
 		invProjectionView.set(combined);
 		Matrix4.inv(invProjectionView.val);
+		
 		frustum.update(invProjectionView);
 	}
 
@@ -82,5 +88,17 @@ class Camera implements ICamera {
 		viewportHeight = height;
 		update();
 	}
-	
+
+	@Override
+	public Ray getPickRay(float screenX, float screenY) {
+
+		final Vector3 start = new Vector3(screenX/viewportWidth *2f - 1f, screenY / viewportHeight * 2f - 1f, -1.0f);
+		start.mul(invProjectionView);
+				
+		final Vector3 end = new Vector3(screenX/viewportWidth *2f - 1f, screenY / viewportHeight * 2f - 1f, 1.0f);
+		end.mul(invProjectionView);
+		
+		return new Ray(start, end);
+	}	
+
 }

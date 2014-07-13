@@ -12,9 +12,13 @@ public class GestureInput implements GestureListener {
 	private final Quaternion IDT_QUATERNION = new Quaternion().idt();
 
 	private final float MOV_SPEED = 0.7f;
+	private final float ZOOM_SPEED = 0.004f;
 
 	private final float PAN_SPEED = -0.1f;
 	private final float FLING_SPEED = -0.001f;
+
+	private final float EPSILON = 0.0001f;
+
 	
 	private Vector3 mov = new Vector3(0, 0, 0);
 	private Quaternion rot = new Quaternion().idt();
@@ -24,7 +28,7 @@ public class GestureInput implements GestureListener {
 	private Quaternion roty = new Quaternion().idt();
 
 
-	// TODO: implement state pattern to handle input actions differently depending n the current state
+	// TODO: implement state pattern to handle input actions differently depending on the current state
 	// e.g. when rotating a tap causes rotation to stop, when not rotating a tap causes a move...
 
 	public void update(IUpdateable updateable) {
@@ -33,7 +37,7 @@ public class GestureInput implements GestureListener {
 	}
 
 	private void slowdown() {
-		if (rot.isIdentity(0.0001f)) {
+		if (rot.isIdentity(EPSILON)) {
 			rot.idt();
 		} else {
 			rot.slerp(IDT_QUATERNION, 0.01f);
@@ -92,6 +96,7 @@ public class GestureInput implements GestureListener {
 	@Override
 	public boolean zoom(float initialDistance, float distance) {
 		Gdx.app.debug("input", "zoom called: initialDistance: " + initialDistance + " distance: " + distance);
+		mov.set( 0f, 0f, (initialDistance - distance) * ZOOM_SPEED);
 		return true;
 	}
 
