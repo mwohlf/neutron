@@ -5,6 +5,7 @@ import java.util.HashSet;
 import net.wohlfart.neutron.scene.IGraph.INode;
 import net.wohlfart.neutron.scene.util.NodeBuilder;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
@@ -30,6 +31,7 @@ public class RaySet extends AbstractEntity {
 		    .useShader(SHADER_NAME)
 			.useStart(start)
 			.useEnd(end)
+			.useColor(Color.MAROON)
 			.createRay("ray"));
 	}
 

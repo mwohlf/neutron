@@ -6,6 +6,7 @@ import java.util.Iterator;
 import net.wohlfart.neutron.scene.graph.ISortToken;
 import net.wohlfart.neutron.scene.node.SimpleNode;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.Texture;
@@ -32,6 +33,7 @@ public class NodeBuilder {
 	private static final VertexAttribute POSITION3 = new VertexAttribute(Usage.Position, 3, ShaderProgram.POSITION_ATTRIBUTE);
 	private static final VertexAttribute TEXTURE2 = new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE);
 	private static final VertexAttribute NORMAL3 = new VertexAttribute(Usage.Normal, 3, ShaderProgram.NORMAL_ATTRIBUTE);
+	private static final VertexAttribute COLOR4 = new VertexAttribute(Usage.Color, 3, ShaderProgram.COLOR_ATTRIBUTE);
 
 	protected Texture texture;
 	protected VertexAttributes attributes;
@@ -39,6 +41,7 @@ public class NodeBuilder {
 
 	protected Vector3 start;
 	protected Vector3 end;
+	
 
 	private int verticesIndex = -1;
 	protected int vertexSize = 0;
@@ -48,6 +51,8 @@ public class NodeBuilder {
 
 	protected FloatArray vertices = new FloatArray();
 	protected ShortArray indices = new ShortArray();
+
+	private Color color;
 
 
 
@@ -89,6 +94,11 @@ public class NodeBuilder {
 
 	public NodeBuilder useEnd(Vector3 end) {
 		this.end = end;
+		return this;
+	}
+
+	public NodeBuilder useColor(Color color) {
+		this.color = color;
 		return this;
 	}
 
@@ -218,6 +228,18 @@ public class NodeBuilder {
 			return this;
 		}
 
+		private CurrentVertex withColor4(Color color) {
+			final int i;
+			if ((i = offset(COLOR4)) > -1) {
+				vertices.set(verticesIndex * vertexSize + i + 0, color.r);
+				vertices.set(verticesIndex * vertexSize + i + 1, color.g);
+				vertices.set(verticesIndex * vertexSize + i + 2, color.b);
+				vertices.set(verticesIndex * vertexSize + i + 3, color.a);
+			}
+			return this;
+		}
+
+		
 		private int offset(VertexAttribute attribute) {
 			Iterator<VertexAttribute> iter = attributes.iterator();
 			while (iter.hasNext()) {
@@ -237,25 +259,25 @@ public class NodeBuilder {
 		vertices.clear();
 		float l = size/2f;
 		addVertex()
-		.withPosition3(-l,-l, 0)  // bottom left
-		.withTexture2(0,1)
-		.withNormal3(0,0,1)
-		;
+			.withPosition3(-l,-l, 0)  // bottom left
+			.withTexture2(0,1)
+			.withNormal3(0,0,1)
+			;
 		addVertex()
-		.withPosition3(+l,-l, 0)  // bottom right
-		.withTexture2(1,1)
-		.withNormal3(0,0,1)
-		;
+			.withPosition3(+l,-l, 0)  // bottom right
+			.withTexture2(1,1)
+			.withNormal3(0,0,1)
+			;
 		addVertex()
-		.withPosition3(+l,+l, 0)  // top right
-		.withTexture2(1,0)
-		.withNormal3(0,0,1)
-		;
+			.withPosition3(+l,+l, 0)  // top right
+			.withTexture2(1,0)
+			.withNormal3(0,0,1)
+			;
 		addVertex()
-		.withPosition3(-l,+l, 0)  // top left
-		.withTexture2(0,0)
-		.withNormal3(0,0,1)
-		;
+			.withPosition3(-l,+l, 0)  // top left
+			.withTexture2(0,0)
+			.withNormal3(0,0,1)
+			;
 
 		return new SimpleNode(
 				id, sortToken,
@@ -296,12 +318,30 @@ public class NodeBuilder {
 		vertices.clear();
 		indices.clear();
 		
-		addVertex().withPosition3(+0.00f, +0.00f, +1.00f);
-		addVertex().withPosition3(+0.00f, +0.00f, +0.00f);
-		addVertex().withPosition3(+0.02f, +0.02f, +0.90f);
-		addVertex().withPosition3(-0.02f, +0.02f, +0.90f);
-		addVertex().withPosition3(-0.02f, -0.02f, +0.90f);
-		addVertex().withPosition3(+0.02f, -0.02f, +0.90f);
+		addVertex()
+			.withPosition3(+0.00f, +0.00f, +1.00f)
+			.withColor4(color)
+			;
+		addVertex()
+			.withPosition3(+0.00f, +0.00f, +0.00f)
+			.withColor4(color)
+			;
+		addVertex()
+			.withPosition3(+0.02f, +0.02f, +0.90f)
+			.withColor4(color)
+			;
+		addVertex()
+			.withPosition3(-0.02f, +0.02f, +0.90f)
+			.withColor4(color)
+			;
+		addVertex()
+			.withPosition3(-0.02f, -0.02f, +0.90f)
+			.withColor4(color)
+			;
+		addVertex()
+			.withPosition3(+0.02f, -0.02f, +0.90f)
+			.withColor4(color)
+			;
 		
 		final float len = new Vector3(end).sub(start).len();
 		final Matrix4 matrix = new Matrix4().scl(len);
