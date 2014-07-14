@@ -26,6 +26,8 @@ import com.badlogic.gdx.utils.ShortArray;
  */
 public class NodeBuilder {
 
+	private static final float EPSILON = 0.001f;
+
 	// offsets are only calculated in the VertexAttributes constructor...
 	private static final VertexAttribute POSITION3 = new VertexAttribute(Usage.Position, 3, ShaderProgram.POSITION_ATTRIBUTE);
 	private static final VertexAttribute TEXTURE2 = new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE);
@@ -302,7 +304,12 @@ public class NodeBuilder {
 		addVertex().withPosition3(+0.02f, -0.02f, +0.90f);
 		
 		final float len = new Vector3(end).sub(start).len();
-		final Matrix4 matrix = new Matrix4().scl(len).rotate(Vector3.Z, end);
+		final Matrix4 matrix = new Matrix4().scl(len);
+		if (new Vector3(end).nor().crs(Vector3.Z).len2() < EPSILON) {
+			matrix.rotate(Vector3.X, 180);
+		} else {
+			matrix.rotate(Vector3.Z, new Vector3(end).nor());
+		}
 		foreachPosition(
 		    new Transformer() {
 		    	@Override

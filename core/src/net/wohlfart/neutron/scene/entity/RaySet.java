@@ -18,7 +18,7 @@ public class RaySet extends AbstractEntity {
 	@Override
 	public void initNodes() {
 		nodes = new HashSet<INode>();
-		addRay(new Vector3(0,0,0), new Vector3(0,0,30));
+		addRay(new Vector3(0,0,0), new Vector3(0,0,30).scl(-1));
 		addRay(new Vector3(0,0,0), new Vector3(0,30,0));
 		addRay(new Vector3(0,0,0), new Vector3(30,0,0));
 	}
