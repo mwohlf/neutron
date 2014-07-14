@@ -16,6 +16,7 @@ public class RenderConfigImpl implements IRenderConfig<RenderConfigImpl> {
 			Clear.class,
 			Blending.class,   // opaque objects first front to back, then the transparent back to front
 			DepthTest.class,
+			PointSprites.class,
 			// probably never change:
 			ColorMask.class,
 			ScissorTest.class,
@@ -35,6 +36,8 @@ public class RenderConfigImpl implements IRenderConfig<RenderConfigImpl> {
 
 	private final DepthTest depthTest;
 
+	private final PointSprites pointSprites;
+
 	private final ColorMask colorMask;
 
 	private final ScissorTest scissorTest;
@@ -49,13 +52,17 @@ public class RenderConfigImpl implements IRenderConfig<RenderConfigImpl> {
 
 
 
+
 	RenderConfigImpl() {
 		this.clear = null;
 		this.blending = null;
 		this.depthTest = null;
+		this.pointSprites = null;
+		
 		this.colorMask = null;
 		this.scissorTest = null;
 		this.stencilTest = null;
+		
 		this.clearDepth = null;
 		this.clearColor = null;
 		this.faceCulling = null;
@@ -65,20 +72,24 @@ public class RenderConfigImpl implements IRenderConfig<RenderConfigImpl> {
 	RenderConfigImpl(
 			Clear clear,
 			Blending blending,
-			ClearColor clearColor,
-			ClearDepth clearDepth,
-			ColorMask colorMask,
 			DepthTest depthTest,
-			FaceCulling faceCulling,
+			PointSprites pointSprites,
+
+			ColorMask colorMask,
 			ScissorTest scissorTest,
-			StencilTest stencilTest) {
+			StencilTest stencilTest,
+			
+			ClearDepth clearDepth,
+			ClearColor clearColor,
+			FaceCulling faceCulling) {
 
 		this.clear = clear;
 		this.blending = blending;
 		this.clearColor = clearColor;
 		this.clearDepth = clearDepth;
-		this.colorMask = colorMask;
 		this.depthTest = depthTest;
+		this.pointSprites = pointSprites;
+		this.colorMask = colorMask;
 		this.faceCulling = faceCulling;
 		this.scissorTest = scissorTest;
 		this.stencilTest = stencilTest;
@@ -88,6 +99,7 @@ public class RenderConfigImpl implements IRenderConfig<RenderConfigImpl> {
 				blending,
 				clearColor,
 				clearDepth,
+				pointSprites,
 				colorMask,
 				depthTest,
 				faceCulling,
@@ -261,6 +273,29 @@ public class RenderConfigImpl implements IRenderConfig<RenderConfigImpl> {
 			public void switchValue() {
 				Gdx.gl.glClearColor(1f, 1f, 1f, 0.5f);
 			}
+		}
+	}
+
+	public enum PointSprites implements RenderProperty {
+		ON {
+			@Override
+			public boolean isValueIn(RenderConfigImpl that) {
+				return (that.pointSprites == ON);
+			}
+			@Override
+			public void switchValue() {
+				Gdx.gl20.glEnable(GL20.GL_VERTEX_PROGRAM_POINT_SIZE);
+			}
+		},
+		OFF {
+			@Override
+			public boolean isValueIn(RenderConfigImpl that) {
+				return (that.pointSprites == OFF);
+			}
+			@Override
+			public void switchValue() {
+				Gdx.gl20.glDisable(GL20.GL_VERTEX_PROGRAM_POINT_SIZE);
+			}	
 		}
 	}
 

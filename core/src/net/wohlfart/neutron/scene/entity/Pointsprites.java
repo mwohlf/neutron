@@ -127,8 +127,7 @@ public class Pointsprites  implements IEntity {
 		@Override
 		public void render(IRenderContext ctx, Iterable<ITree<INode>> children) {
 			ctx.begin(shader);
-			ctx.setRenderConfig(IRenderConfig.DEFAULT_3D);
-			Gdx.gl20.glEnable(GL20.GL_VERTEX_PROGRAM_POINT_SIZE);
+			ctx.setRenderConfig(IRenderConfig.POINT_SPRITES);
 			shader.setUniformMatrix("u_worldToClip", ctx.getCamera().getViewMatrix());
 			shader.setUniformMatrix("u_modelToWorld", matrix);
 			shader.setUniformf("u_thickness", 64f);
