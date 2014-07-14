@@ -18,6 +18,9 @@ public class NodeSortStrategy<T extends NodeSortStrategy.HasSortToken> implement
     public static final ISortToken POS_INF_TOKEN
     	= new StaticSortToken(false, Double.POSITIVE_INFINITY, "POS_INF_TOKEN");
 
+    public static final ISortToken ZERO_TOKEN
+    	= new StaticSortToken(false, 0d, "NEG_INF_TOKEN");
+
     public static final ISortToken NEG_INF_TOKEN
     	= new StaticSortToken(false, Double.NEGATIVE_INFINITY, "NEG_INF_TOKEN");
    

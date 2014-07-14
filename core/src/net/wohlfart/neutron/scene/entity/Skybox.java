@@ -7,6 +7,7 @@ import net.wohlfart.neutron.scene.IRenderContext;
 import net.wohlfart.neutron.scene.ITree;
 import net.wohlfart.neutron.scene.graph.ISortToken;
 import net.wohlfart.neutron.scene.graph.NodeSortStrategy;
+import net.wohlfart.neutron.scene.node.IRenderConfig;
 import net.wohlfart.neutron.scene.util.ShaderLoader;
 
 import com.badlogic.gdx.Gdx;
@@ -22,13 +23,15 @@ import com.badlogic.gdx.math.Vector3;
 
 public class Skybox implements IEntity {
 
+	private static final String SKY_TEXTURE_PATH = "skybox/new";
+
+	private static final String SHADER_NAME = "skybox";
+	
 	private IGraph graph;
 
 	private ShaderProgram shader;
 
 	private Side[] sides;
-
-	private String path = "skybox/new";
 
 	private Matrix4 matrix = new Matrix4();
 
@@ -45,7 +48,7 @@ public class Skybox implements IEntity {
 	public void register(IGraph graph) {
 		this.graph = graph;
 		createSides();
-		shader = ShaderLoader.load("skybox");
+		shader = ShaderLoader.load(SHADER_NAME);
 		graph.add(this);
 		for (Side side : sides) {
 			graph.add(side);
@@ -54,12 +57,12 @@ public class Skybox implements IEntity {
 
 	private void createSides() {
 		sides = new Side[] {
-				new Side("back", new Texture(Gdx.files.internal(path + "/" + "back6.png")), new Vector3( 0f, 0f,+1f).nor()),
-				new Side("front", new Texture(Gdx.files.internal(path + "/" + "front5.png")), new Vector3( 0f, 0f,-1f).nor()),
-				new Side("top", new Texture(Gdx.files.internal(path + "/" + "top3.png")), new Vector3( 0f,+1f, 0f).nor()),
-				new Side("bottom", new Texture(Gdx.files.internal(path + "/" + "bottom4.png")), new Vector3( 0f,-1f, 0f).nor()),
-				new Side("right", new Texture(Gdx.files.internal(path + "/" + "right1.png")), new Vector3(+1f, 0f, 0f).nor()),
-				new Side("left", new Texture(Gdx.files.internal(path + "/" + "left2.png")), new Vector3(-1f, 0f, 0f).nor()),
+				new Side("back", new Texture(Gdx.files.internal(SKY_TEXTURE_PATH + "/" + "back6.png")), new Vector3( 0f, 0f,+1f).nor()),
+				new Side("front", new Texture(Gdx.files.internal(SKY_TEXTURE_PATH + "/" + "front5.png")), new Vector3( 0f, 0f,-1f).nor()),
+				new Side("top", new Texture(Gdx.files.internal(SKY_TEXTURE_PATH + "/" + "top3.png")), new Vector3( 0f,+1f, 0f).nor()),
+				new Side("bottom", new Texture(Gdx.files.internal(SKY_TEXTURE_PATH + "/" + "bottom4.png")), new Vector3( 0f,-1f, 0f).nor()),
+				new Side("right", new Texture(Gdx.files.internal(SKY_TEXTURE_PATH + "/" + "right1.png")), new Vector3(+1f, 0f, 0f).nor()),
+				new Side("left", new Texture(Gdx.files.internal(SKY_TEXTURE_PATH + "/" + "left2.png")), new Vector3(-1f, 0f, 0f).nor()),
 		};
 	}
 
@@ -118,14 +121,15 @@ public class Skybox implements IEntity {
 
 		@Override
 		public void render(IRenderContext ctx, Iterable<ITree<INode>> children) {
-			shader.begin();
+			ctx.begin(shader);
+			ctx.setRenderConfig(IRenderConfig.DEFAULT_3D);
 			shader.setUniformMatrix("u_worldToClip", ctx.getCamera().getViewMatrix());
 			shader.setUniformMatrix("u_modelToWorld", matrix);
 			Gdx.gl20.glEnable(GL20.GL_TEXTURE_2D);
 			texture.bind(0);
 			shader.setUniformi("u_texture", 0);
-			render(shader, GL20.GL_TRIANGLE_FAN);
-			shader.end();
+			ctx.render(this, GL20.GL_TRIANGLE_FAN);
+			ctx.end();
 		}
 
 	}
