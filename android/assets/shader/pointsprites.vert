@@ -19,7 +19,7 @@ void main(void) {
     // forward texture coords to the fragment shader
     //passTextureCoord = a_texCoord;
     
-    gl_PointSize = 5;
+    gl_PointSize = u_thickness;
 
     gl_Position = u_worldToClip * u_modelToWorld * vec4(a_position, 1.0);
     

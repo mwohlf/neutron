@@ -38,7 +38,7 @@ public class Pointsprites  implements IEntity {
 
 	private final Matrix4 matrix = new Matrix4().idt();
 
-	private final int spriteCount = 50000;
+	private final int spriteCount = 500;
 
 	private final Random random = new Random();
 
@@ -128,9 +128,10 @@ public class Pointsprites  implements IEntity {
 		public void render(IRenderContext ctx, Iterable<ITree<INode>> children) {
 			ctx.begin(shader);
 			ctx.setRenderConfig(IRenderConfig.DEFAULT_3D);
+			Gdx.gl20.glEnable(GL20.GL_VERTEX_PROGRAM_POINT_SIZE);
 			shader.setUniformMatrix("u_worldToClip", ctx.getCamera().getViewMatrix());
 			shader.setUniformMatrix("u_modelToWorld", matrix);
-			//shader.setUniformf("u_thickness", 64f);
+			shader.setUniformf("u_thickness", 64f);
 			if (texture != null) {
 				Gdx.gl20.glEnable(GL20.GL_TEXTURE_2D);
 				texture.bind(0);
