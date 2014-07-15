@@ -128,27 +128,24 @@ public class RenderConfigImpl implements IRenderConfig<RenderConfigImpl> {
 	public RenderConfigImpl switchValues(RenderConfigImpl oldVal) {
 		if (oldVal.clear != this.clear) {
 			clear.switchValue();
-
 		}
 		if (oldVal.blending != this.blending) {
 			blending.switchValue();
-
 		}
 		if (oldVal.clearColor != this.clearColor) {
 			clearColor.switchValue();
-
 		}
 		if (oldVal.clearDepth != this.clearDepth) {
 			clearDepth.switchValue();
-
+		}
+		if (oldVal.pointSprites != this.pointSprites) {
+			pointSprites.switchValue();
 		}
 		if (oldVal.colorMask != this.colorMask) {
 			colorMask.switchValue();
-
 		}
 		if (oldVal.depthTest != this.depthTest) {
 			depthTest.switchValue();
-
 		}
 		if (oldVal.faceCulling != this.faceCulling) {
 			faceCulling.switchValue();

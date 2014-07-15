@@ -66,7 +66,7 @@ public class Pointsprites  implements IEntity {
 	@Override
 	public void register(IGraph graph) {
 		this.graph = graph;
-	//	texture = new Texture(Gdx.files.internal(POINT_SPRITES_TEXTURE_FILE));
+		texture = new Texture(Gdx.files.internal(POINT_SPRITES_TEXTURE_FILE));
 		shader = ShaderLoader.load(SHADER_NAME);
 		sprites = new Sprites();
 		graph.add(sprites);
@@ -86,25 +86,28 @@ public class Pointsprites  implements IEntity {
 			super(true, // static
 					spriteCount, // maxVertices
 					0, // maxIndices
-					new VertexAttribute(Usage.Position, 3, "a_position") //,
+					new VertexAttribute(Usage.Position, 3, "a_position"),
 				//	new VertexAttribute(Usage.Color, 4, "a_color"),
-			  	//    new VertexAttribute(Usage.TextureCoordinates, 2, "a_texCoord")
+			  	    new VertexAttribute(Usage.TextureCoordinates, 2, "a_texCoord")
 					);
 
-			float[] vertices = new float[spriteCount * 3];
-			for (int i = 0; i < vertices.length; i += 3) {
-				vertices[i + 0] = random.nextFloat() * 200 -100;
-				vertices[i + 1] = random.nextFloat() * 200 -100;
-				vertices[i + 2] = random.nextFloat() * 200 -100;
+			int floatCount = getVertexAttributes().vertexSize/4;
+			
+			float[] vertices = new float[spriteCount * floatCount];
+			for (int i = 0; i < vertices.length; i += floatCount) {
+				int j = i;
+				vertices[j++] = random.nextFloat() * 200 -100;
+				vertices[j++] = random.nextFloat() * 200 -100;
+				vertices[j++] = random.nextFloat() * 200 -100;
 /*
 				vertices[i + 3] = 1;
 				vertices[i + 4] = 1;
 				vertices[i + 5] = 1;
 				vertices[i + 6] = 1;
-
-				vertices[i + 7] = 0.5f;
-				vertices[i + 8] = 0.5f;
-				*/
+*/
+				vertices[j++] = 1f;
+				vertices[j++] = 1f;
+				
 			}
 			this.setVertices(vertices);
 		}
@@ -130,7 +133,7 @@ public class Pointsprites  implements IEntity {
 			ctx.setRenderConfig(IRenderConfig.POINT_SPRITES);
 			shader.setUniformMatrix("u_worldToClip", ctx.getCamera().getViewMatrix());
 			shader.setUniformMatrix("u_modelToWorld", matrix);
-			shader.setUniformf("u_thickness", 64f);
+			shader.setUniformf("u_thickness", 14f);
 			if (texture != null) {
 				Gdx.gl20.glEnable(GL20.GL_TEXTURE_2D);
 				texture.bind(0);

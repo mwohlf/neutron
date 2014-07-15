@@ -9,15 +9,15 @@ uniform mat4 u_worldToClip;
 uniform float u_thickness;
 
 varying vec4 passColor;
-//varying vec2 passTextureCoord;
+varying vec2 passTextureCoord;
 
 
 void main(void) {
     
-    //passColor = a_color;
+    // passColor = a_color;
     
     // forward texture coords to the fragment shader
-    //passTextureCoord = a_texCoord;
+    // passTextureCoord = a_texCoord;
     
     gl_PointSize = u_thickness;
 
