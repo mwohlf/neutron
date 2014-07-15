@@ -4,8 +4,11 @@ import net.wohlfart.neutron.input.GestureInput;
 import net.wohlfart.neutron.input.KeyboardInput;
 import net.wohlfart.neutron.scene.IGraph.IEntity;
 import net.wohlfart.neutron.scene.IRenderContext;
+import net.wohlfart.neutron.scene.entity.Cube;
 import net.wohlfart.neutron.scene.entity.Pointsprites;
+import net.wohlfart.neutron.scene.entity.Quad;
 import net.wohlfart.neutron.scene.entity.RaySet;
+import net.wohlfart.neutron.scene.entity.Skybox;
 import net.wohlfart.neutron.scene.graph.Graph;
 import net.wohlfart.neutron.scene.node.RenderContext;
 
@@ -39,9 +42,8 @@ public class Neutron extends ApplicationAdapter {
 		
 		graph.setup(new IEntity[] {
 				
-			    /*
 			    new Skybox(),
-			     				new Quad().withPosition(0, 0, -100),
+			    new Quad().withPosition(0, 0, -100),
 				new Quad().withPosition(1, 0, -200),
 				new Quad().withPosition(0, 5, -300),
 				new Quad().withPosition(3, 2, -400),
@@ -50,8 +52,9 @@ public class Neutron extends ApplicationAdapter {
 				
 				new Cube().withPosition(5,2,-50),			
 				new RaySet(),
-				*/	
+				
 				new RaySet(),
+				
 				new Pointsprites(),
 		});
 	}

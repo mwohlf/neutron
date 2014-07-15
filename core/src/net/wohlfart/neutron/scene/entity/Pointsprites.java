@@ -24,9 +24,10 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 
-public class Pointsprites  implements IEntity {
+public class Pointsprites implements IEntity {
 
-	private static final String POINT_SPRITES_TEXTURE_FILE = "badlogic.jpg";
+	private static final String POINT_SPRITES_TEXTURE_FILE = "cloud.jpg";
+	//private static final String POINT_SPRITES_TEXTURE_FILE = "badlogic.jpg";
 
 	private static final String SHADER_NAME = "pointsprites";
 
@@ -86,9 +87,9 @@ public class Pointsprites  implements IEntity {
 			super(true, // static
 					spriteCount, // maxVertices
 					0, // maxIndices
-					new VertexAttribute(Usage.Position, 3, "a_position"),
+					new VertexAttribute(Usage.Position, 3, "a_position")
 				//	new VertexAttribute(Usage.Color, 4, "a_color"),
-			  	    new VertexAttribute(Usage.TextureCoordinates, 2, "a_texCoord")
+			  	//  new VertexAttribute(Usage.TextureCoordinates, 2, "a_texCoord")
 					);
 
 			int floatCount = getVertexAttributes().vertexSize/4;
@@ -99,12 +100,21 @@ public class Pointsprites  implements IEntity {
 				vertices[j++] = random.nextFloat() * 200 -100;
 				vertices[j++] = random.nextFloat() * 200 -100;
 				vertices[j++] = random.nextFloat() * 200 -100;
+				if (j > floatCount) {
+					continue;
+				}
 /*
+				if (j > floatCount) {
+					continue;
+				}
 				vertices[i + 3] = 1;
 				vertices[i + 4] = 1;
 				vertices[i + 5] = 1;
 				vertices[i + 6] = 1;
 */
+				if (j > floatCount) {
+					continue;
+				}
 				vertices[j++] = 1f;
 				vertices[j++] = 1f;
 				
@@ -133,12 +143,12 @@ public class Pointsprites  implements IEntity {
 			ctx.setRenderConfig(IRenderConfig.POINT_SPRITES);
 			shader.setUniformMatrix("u_worldToClip", ctx.getCamera().getViewMatrix());
 			shader.setUniformMatrix("u_modelToWorld", matrix);
-			shader.setUniformf("u_thickness", 14f);
+			shader.setUniformf("u_thickness", 64f);
 			if (texture != null) {
 				Gdx.gl20.glEnable(GL20.GL_TEXTURE_2D);
-				texture.bind(0);
 				Gdx.gl20.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_WRAP_S, GL20.GL_CLAMP_TO_EDGE );
 				Gdx.gl20.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_WRAP_T, GL20.GL_CLAMP_TO_EDGE );
+				texture.bind(0);
 				shader.setUniformi("u_texture", 0);
 			}
 			ctx.render(this, GL20.GL_POINTS);

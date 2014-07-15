@@ -231,6 +231,16 @@ public class RenderConfigImpl implements IRenderConfig<RenderConfigImpl> {
 	}
 
 	public enum ClearColor implements RenderProperty {
+		IGNORE {
+			@Override
+			public boolean isValueIn(RenderConfigImpl that) {
+				return true;
+			}
+			@Override
+			public void switchValue() {
+				// do nothing
+			}
+		},
 		BLACK {
 			@Override
 			public boolean isValueIn(RenderConfigImpl that) {
@@ -282,6 +292,7 @@ public class RenderConfigImpl implements IRenderConfig<RenderConfigImpl> {
 			@Override
 			public void switchValue() {
 				Gdx.gl20.glEnable(GL20.GL_VERTEX_PROGRAM_POINT_SIZE);
+			    Gdx.gl20.glEnable(34913); // see: http://badlogicgames.com/forum/viewtopic.php?t=1646&p=9199
 			}
 		},
 		OFF {
@@ -292,6 +303,7 @@ public class RenderConfigImpl implements IRenderConfig<RenderConfigImpl> {
 			@Override
 			public void switchValue() {
 				Gdx.gl20.glDisable(GL20.GL_VERTEX_PROGRAM_POINT_SIZE);
+				Gdx.gl20.glDisable(34913);
 			}	
 		}
 	}

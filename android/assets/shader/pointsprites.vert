@@ -1,7 +1,7 @@
 // see: http://gamedev.stackexchange.com/questions/11095/opengl-es-2-0-point-sprites-size
 
 attribute vec3 a_position;
-//attribute vec2 a_texCoord; 
+attribute vec2 a_texCoord; 
 //attribute vec4 a_color;
 
 uniform mat4 u_modelToWorld;
@@ -17,7 +17,8 @@ void main(void) {
     // passColor = a_color;
     
     // forward texture coords to the fragment shader
-    // passTextureCoord = a_texCoord;
+    //passTextureCoord = gl_PointCoord;
+    //passTextureCoord = vec2(0.5,0.5);
     
     gl_PointSize = u_thickness;
 

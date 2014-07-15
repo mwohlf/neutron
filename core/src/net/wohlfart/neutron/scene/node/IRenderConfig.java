@@ -28,7 +28,7 @@ public interface IRenderConfig<T extends IRenderConfig<T>> {
 			StencilTest.OFF,
 			
 			ClearDepth.ONE,
-			ClearColor.BLUE,
+			ClearColor.BLACK,
 			FaceCulling.OFF);
 
 	public static final RenderConfigImpl CLEAR = new RenderConfigImpl(
@@ -42,7 +42,7 @@ public interface IRenderConfig<T extends IRenderConfig<T>> {
 			StencilTest.OFF,
 			
 			ClearDepth.ONE,
-			ClearColor.BLUE,
+			ClearColor.BLACK,
 			FaceCulling.OFF);
 
 	public static final RenderConfigImpl BLENDING_ON = new RenderConfigImpl(
@@ -56,7 +56,7 @@ public interface IRenderConfig<T extends IRenderConfig<T>> {
 			StencilTest.OFF,
 			
 			ClearDepth.ONE,
-			ClearColor.BLUE,
+			ClearColor.BLACK,
 			FaceCulling.BACK);
 
 	public static final RenderConfigImpl ATMOSPHERE_FRONT = new RenderConfigImpl(
@@ -70,7 +70,7 @@ public interface IRenderConfig<T extends IRenderConfig<T>> {
 			StencilTest.OFF,
 
 			ClearDepth.ONE,
-			ClearColor.BLUE,
+			ClearColor.BLACK,
 			FaceCulling.FRONT);
 
 	public static final RenderConfigImpl DEFAULT_3D = new RenderConfigImpl(
@@ -84,7 +84,7 @@ public interface IRenderConfig<T extends IRenderConfig<T>> {
 			StencilTest.OFF,
 			
 			ClearDepth.ONE,
-			ClearColor.BLUE,
+			ClearColor.BLACK,
 			FaceCulling.BACK);
 
 	public static final RenderConfigImpl POINT_SPRITES = new RenderConfigImpl(
@@ -98,8 +98,8 @@ public interface IRenderConfig<T extends IRenderConfig<T>> {
 			StencilTest.OFF,
 			
 			ClearDepth.ONE,
-			ClearColor.BLUE,
-			FaceCulling.BACK);
+			ClearColor.BLACK,
+			FaceCulling.OFF);
 
 	public static final RenderConfigImpl SPRITE_CLOUD = new RenderConfigImpl(
 			Clear.OFF,
@@ -112,7 +112,7 @@ public interface IRenderConfig<T extends IRenderConfig<T>> {
 			StencilTest.OFF,
 			
 			ClearDepth.ONE,
-			ClearColor.BLUE,
+			ClearColor.BLACK,
 			FaceCulling.BACK);
 
 	public static final RenderConfigImpl SKYBOX = new RenderConfigImpl(
@@ -126,7 +126,7 @@ public interface IRenderConfig<T extends IRenderConfig<T>> {
 			StencilTest.OFF,
 
 			ClearDepth.ONE,
-			ClearColor.BLUE,
+			ClearColor.BLACK,
 			FaceCulling.BACK);
 
 	public static final RenderConfigImpl NULL_CONFIG = new RenderConfigImpl();
