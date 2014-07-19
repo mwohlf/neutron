@@ -27,7 +27,9 @@ public class RaySet extends AbstractEntity {
 	private void addRay(Vector3 start, Vector3 end) {
 		nodes.add(new NodeBuilder()
 			.useAttributes(new VertexAttributes(
-					new VertexAttribute(Usage.Position, 3, ShaderProgram.POSITION_ATTRIBUTE)))
+					new VertexAttribute(Usage.Position, 3, ShaderProgram.POSITION_ATTRIBUTE),
+					new VertexAttribute(Usage.Color, 4, ShaderProgram.COLOR_ATTRIBUTE)
+					))
 		    .useShader(SHADER_NAME)
 			.useStart(start)
 			.useEnd(end)
