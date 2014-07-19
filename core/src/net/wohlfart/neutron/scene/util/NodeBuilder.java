@@ -33,16 +33,17 @@ public class NodeBuilder {
 	private static final VertexAttribute POSITION3 = new VertexAttribute(Usage.Position, 3, ShaderProgram.POSITION_ATTRIBUTE);
 	private static final VertexAttribute TEXTURE2 = new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE);
 	private static final VertexAttribute NORMAL3 = new VertexAttribute(Usage.Normal, 3, ShaderProgram.NORMAL_ATTRIBUTE);
-	private static final VertexAttribute COLOR4 = new VertexAttribute(Usage.Color, 3, ShaderProgram.COLOR_ATTRIBUTE);
+	private static final VertexAttribute COLOR4 = new VertexAttribute(Usage.Color, 4, ShaderProgram.COLOR_ATTRIBUTE);
 
+	// set from outside
 	protected Texture texture;
 	protected VertexAttributes attributes;
 	protected float size;
-
+	protected Color color;
 	protected Vector3 start;
 	protected Vector3 end;
 	
-
+	// calculated / generated
 	private int verticesIndex = -1;
 	protected int vertexSize = 0;
 	private CurrentVertex currentVertex = new CurrentVertex();
@@ -51,9 +52,6 @@ public class NodeBuilder {
 
 	protected FloatArray vertices = new FloatArray();
 	protected ShortArray indices = new ShortArray();
-
-	private Color color;
-
 
 
 	public NodeBuilder useAttributes(VertexAttributes attributes) {

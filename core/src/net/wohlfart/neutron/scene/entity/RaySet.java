@@ -33,7 +33,7 @@ public class RaySet extends AbstractEntity {
 		    .useShader(SHADER_NAME)
 			.useStart(start)
 			.useEnd(end)
-			.useColor(Color.MAROON)
+			.useColor(Color.RED)
 			.createRay("ray"));
 	}
 
