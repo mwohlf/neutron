@@ -89,16 +89,29 @@ class Camera implements ICamera {
 		update();
 	}
 
+	/*
+	 * screenX: [0..viewport width]
+	 * screenY: [0..viewport height]
+	 * 
+	 * we have to get both in the cam space and inverse project into world space...
+	 */
 	@Override
 	public Ray getPickRay(float screenX, float screenY) {
-
-		final Vector3 start = new Vector3(screenX/viewportWidth *2f - 1f, screenY / viewportHeight * 2f - 1f, -1.0f);
-		start.mul(invProjectionView);
+	
+		final Vector3 camSpaceStart = new Vector3( 
+				screenX/viewportWidth*2f - 1f, 
+				1f - screenY/viewportHeight*2f, 
+				-1.0f);  // near plane cam space
+		camSpaceStart.mul(invProjectionView);
 				
-		final Vector3 end = new Vector3(screenX/viewportWidth *2f - 1f, screenY / viewportHeight * 2f - 1f, 1.0f);
-		end.mul(invProjectionView);
+		final Vector3 camSpaceEnd = new Vector3( 
+				screenX/viewportWidth*2f - 1f, 
+				1f - screenY/viewportHeight*2f, 
+				1.0f); // far plane cam space
 		
-		return new Ray(start, end);
+		camSpaceEnd.mul(invProjectionView);
+		
+		return new Ray(camSpaceStart, camSpaceEnd);
 	}	
 
 }

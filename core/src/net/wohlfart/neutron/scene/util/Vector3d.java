@@ -41,6 +41,10 @@ public class Vector3d {
 		return (float)z;
 	}
 	
+	public Vector3 getVector3() {
+		return new Vector3((float)x, (float)y, (float)z);
+	}
+	
 	public Vector3d add(Vector3 vec) {
 		this.x += vec.x;
 		this.y += vec.y;

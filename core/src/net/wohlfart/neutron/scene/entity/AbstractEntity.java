@@ -13,16 +13,16 @@ import com.badlogic.gdx.math.Vector3;
 
 public abstract class AbstractEntity implements IEntity {
 
-	private final Quaternion rotation = new Quaternion();
+	protected final Quaternion rotation = new Quaternion();
 
-	private final Vector3d position = new Vector3d();
+	protected final Vector3d position = new Vector3d();
 
-	private IGraph graph;
+	protected IGraph graph;
 
 	protected Set<INode> nodes;
 
-	private Vector3 tmpMov = new Vector3();
-	private Quaternion tmRot = new Quaternion();
+	protected Vector3 tmpMov = new Vector3();
+	protected Quaternion tmRot = new Quaternion();
 
 	public IEntity withPosition(double x, double y, double z) {
 		position.set(x, y, z);

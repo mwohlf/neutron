@@ -19,9 +19,9 @@ public class GestureInput implements GestureListener {
 
 	private final float EPSILON = 0.0001f;
 
-	
-	private Vector3 mov = new Vector3(0, 0, 0);
-	private Quaternion rot = new Quaternion().idt();
+	private final Vector2 pick = new Vector2(Float.NaN, Float.NaN);
+	private final Vector3 mov = new Vector3(0, 0, 0);
+	private final Quaternion rot = new Quaternion().idt();
 
 	// tmp  
 	private Quaternion rotx = new Quaternion().idt();
@@ -34,6 +34,10 @@ public class GestureInput implements GestureListener {
 	public void update(IUpdateable updateable) {
 		updateable.update(rot, mov);
 		slowdown();
+	}
+	
+	public Vector2 getPickPosition() {
+		return pick;
 	}
 
 	private void slowdown() {
@@ -57,6 +61,8 @@ public class GestureInput implements GestureListener {
 			mov.set(0, 0, MOV_SPEED);
 			return true;	
 		} else {
+			// need an event bus here to post stuff...
+			pick.set(x, y);
 			return false;
 		}
 	}

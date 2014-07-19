@@ -354,9 +354,9 @@ public class NodeBuilder {
 		    	public void transform(float[] vertexValues) {
 		    		Vector3 vec = new Vector3(vertexValues[0], vertexValues[1], vertexValues[2]);
 		    		vec.mul(matrix);
-		    		vertexValues[0] = vec.x;
-		    		vertexValues[1] = vec.y;
-		    		vertexValues[2] = vec.z;
+		    		vertexValues[0] = vec.x + start.x;
+		    		vertexValues[1] = vec.y + start.y;
+		    		vertexValues[2] = vec.z + start.z;
 		    	}
 			}
 		); 

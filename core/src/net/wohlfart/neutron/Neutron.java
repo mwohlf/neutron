@@ -2,6 +2,7 @@ package net.wohlfart.neutron;
 
 import net.wohlfart.neutron.input.GestureInput;
 import net.wohlfart.neutron.input.KeyboardInput;
+import net.wohlfart.neutron.scene.ICamera;
 import net.wohlfart.neutron.scene.IGraph.IEntity;
 import net.wohlfart.neutron.scene.IRenderContext;
 import net.wohlfart.neutron.scene.entity.RaySet;
@@ -13,6 +14,8 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.collision.Ray;
 
 public class Neutron extends ApplicationAdapter {
 
@@ -22,6 +25,7 @@ public class Neutron extends ApplicationAdapter {
 	
 	
 	private IRenderContext ctx;
+	private RaySet raySet;
 
 
 	@Override
@@ -36,7 +40,13 @@ public class Neutron extends ApplicationAdapter {
 		Gdx.input.setInputProcessor(new InputMultiplexer(
 				keyboardInput, new GestureDetector(gestureInput)));
 		
+		raySet = new RaySet();
+		
 		graph.setup(new IEntity[] {
+				
+				raySet,
+
+				
 				/*
 			    new Skybox(),
 			    new Quad().withPosition(0, 0, -100),
@@ -47,10 +57,10 @@ public class Neutron extends ApplicationAdapter {
 				new Quad().withPosition(1, 6, -600), 
 				
 				new Cube().withPosition(5,2,-50),
-				*/
-				new RaySet(),
+				
 								
-				// new Pointsprites(),
+				new Pointsprites(),
+				*/
 		});
 	}
 
@@ -61,11 +71,25 @@ public class Neutron extends ApplicationAdapter {
 
 	@Override
 	public void render() {
+		processInputs();
+		// rendering
+		graph.render(ctx);
+	}
+	
+	
+	private void processInputs() {
 		// process pending user input
 		keyboardInput.update(graph);
 		gestureInput.update(graph);
-		// rendering
-		graph.render(ctx);
+		
+		Vector2 pick = gestureInput.getPickPosition();
+		if (!Float.isNaN(pick.x) && !Float.isNaN(pick.y)) {
+			ICamera cam = graph.getCamera();
+			Ray ray = cam.getPickRay(pick.x, pick.y);
+			raySet.addRay(ray);
+		}
+		pick.x = Float.NaN;
+		pick.y = Float.NaN;
 	}
 
 }
