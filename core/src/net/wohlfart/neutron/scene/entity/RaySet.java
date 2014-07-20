@@ -38,13 +38,23 @@ public class RaySet extends AbstractEntity {
 		Vector3 s = new Vector3(start);
 		Vector3 e = new Vector3(end);
 		
-		s = s.add(position.getVector3().mul(rotation.cpy()));
-		e = e.add(position.getVector3().mul(rotation.cpy()));
 		
-		s = s.mul(rotation.cpy().conjugate());
-		e = e.mul(rotation.cpy().conjugate());
+		// TODO: rotate and move sart and end point
+		
+		// TODO: fix the matrix rest in AbstractEntity
+		
+		
+		
+		// s.rot(matrix)
+		/*
+		// updating position and rotation
+		rotation.mulLeft(rot);
+		tmRot.set(rotation);
+		position.add(tmRot.conjugate().transform(tmpMov.set(mov)));		 
+		 */
+		
+		System.out.println("ray in world space:  from " + start + " to " + end);
 
-		System.out.println("adding ray from " + start + " to " + end);
 		SimpleNode newNode = new NodeBuilder()
 			.useAttributes(new VertexAttributes(
 						new VertexAttribute(Usage.Position, 3, ShaderProgram.POSITION_ATTRIBUTE),							
@@ -54,9 +64,14 @@ public class RaySet extends AbstractEntity {
 			.useEnd(e)
 			.useColor(Color.RED)
 			.createRay("ray");
+		
+		// ...best option woudl be to modify the matrix of this node
+		// however the entity resets the matricis of all nodes atm
+		// we need to fix this first...
+		// final Matrix4 matrix = newNode.getModel2World();
 
-		nodes.add(newNode);
 		graph.add(newNode);
+		nodes.add(newNode);
 	}
 
 
