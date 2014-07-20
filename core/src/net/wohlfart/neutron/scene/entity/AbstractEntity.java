@@ -38,26 +38,11 @@ public abstract class AbstractEntity implements IEntity {
 		// updating the nodes with the new pos/rot
 		for (INode node : nodes) {
 			final Matrix4 matrix = node.getModel2World();
-			// setting the rot/mov to the parnets:
-			// ----------------------------  resetting to the parents rot/mov:
-			//  matrix.idt();
-			//  matrix.rotate(rotation);
-			//  matrix.translate(position.getX(), position.getY(), position.getZ());
-			// ----------------------------
-			
-			// ---------------------------- update and modify rot/mov
 			tmpRot = matrix.getRotation(tmpRot, true);			
-			tmpRot.mulLeft(rot);			
-			//
+			tmpRot = tmpRot.mulLeft(rot);			
 			tmpMov = matrix.getTranslation(tmpMov);
-			tmpMov.add(mov);
-			tmpMov = tmpRot.transform(tmpMov);
-			//tmpMov.add(new Quaternion(tmpRot).transform(new Vector3(mov)));
-			// ----------------------------
-
-			// setting specific columns only:
-			matrix.set(tmpRot);	
-			matrix.setTranslation(tmpMov);
+			tmpMov = rot.transform(tmpMov.add(mov));
+			matrix.set(tmpMov, tmpRot);	
 		}
 	}
 	
