@@ -1,90 +1,79 @@
 package net.wohlfart.neutron;
 
-import net.wohlfart.neutron.input.GestureInput;
-import net.wohlfart.neutron.input.KeyboardInput;
-import net.wohlfart.neutron.scene.ICamera;
-import net.wohlfart.neutron.scene.IGraph.IEntity;
-import net.wohlfart.neutron.scene.IRenderContext;
-import net.wohlfart.neutron.scene.entity.Cube;
-import net.wohlfart.neutron.scene.entity.Pointsprites;
-import net.wohlfart.neutron.scene.entity.Quad;
-import net.wohlfart.neutron.scene.entity.RaySet;
-import net.wohlfart.neutron.scene.entity.Skybox;
-import net.wohlfart.neutron.scene.graph.Graph;
-import net.wohlfart.neutron.scene.node.RenderContext;
-
 import com.badlogic.gdx.Application;
-import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.input.GestureDetector;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.collision.Ray;
 
-public class Neutron extends ApplicationAdapter {
+public class Neutron implements ApplicationListener {
 
-	private Graph graph;
-	private KeyboardInput keyboardInput;
-	private GestureInput gestureInput;
-		
-	private IRenderContext ctx;
-	private RaySet raySet;
+	private IStage currentState = IStage.NULL;
+	private PlayStage playStage;
 
 	@Override
 	public void create() {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
+		switchState(new IntroStage());
+		createPlayState();
 		
-		this.graph = new Graph();
-		this.keyboardInput = new KeyboardInput();
-		this.gestureInput = new GestureInput();
-		this.ctx = new RenderContext(graph.getCamera());
-
-		Gdx.input.setInputProcessor(new InputMultiplexer(
-				keyboardInput, new GestureDetector(gestureInput)));
-		
-		raySet = new RaySet();
-		
-		graph.setup(new IEntity[] {		
-				raySet,				
-				
-			    new Skybox(),			
-			    new Quad().withPosition(0, 0, -100),
-				new Quad().withPosition(1, 0, -200),
-				new Quad().withPosition(0, 5, -300),
-				new Quad().withPosition(3, 2, -400),
-				new Quad().withPosition(2, 4, -500),
-				new Quad().withPosition(1, 6, -600), 		
-				new Cube().withPosition(5,2,-50),								
-				new Pointsprites(),		
-					
-		});
+		// currentState = new PlayStage();
+		// currentState.create();
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		this.ctx.getCamera().resizeViewport(width, height);
+		currentState.resize(width, height);
 	}
 
 	@Override
 	public void render() {
-		processInputs();
-		graph.render(ctx);
-	}
-	
-	
-	private void processInputs() {
-		// process pending user input
-		keyboardInput.update(graph);
-		gestureInput.update(graph);
-		
-		Vector2 pick = gestureInput.getPickPosition();
-		if (!Float.isNaN(pick.x) && !Float.isNaN(pick.y)) {
-			ICamera cam = graph.getCamera();
-			Ray ray = cam.getPickRay(pick.x, pick.y);
-			raySet.addRay(ray);
-		}
-		pick.x = Float.NaN;
-		pick.y = Float.NaN;
+		currentState.render();
 	}
 
+	@Override
+	public void pause() {
+		currentState.pause();
+	}
+
+	@Override
+	public void resume() {
+		currentState.resume();
+	}
+
+	@Override
+	public void dispose() {
+		currentState.dispose();
+	}
+	
+	/**
+	 * calls dispose on the old stage and create on the new stage
+	 * 
+	 */
+	private void switchState(IStage newState) {
+		currentState.dispose();
+		currentState = newState;
+		currentState.create();
+	}
+	
+	private void setPlayStage(PlayStage playStage) {
+		this.playStage = playStage;
+		switchState(playStage);
+	}
+
+	private void createPlayState() {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				// running NOT in the render thread
+				final PlayStage playStage = new PlayStage();
+				playStage.initialize();
+				Gdx.app.postRunnable(new Runnable() {
+					@Override
+					public void run() {
+						// running in the render thread
+						setPlayStage(playStage);
+					}
+				});
+			}
+		}).start();
+	}
 }

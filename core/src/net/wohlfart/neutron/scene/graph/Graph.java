@@ -16,16 +16,22 @@ import com.badlogic.gdx.math.Vector3;
 
 public class Graph implements IGraph, IUpdateable {
 
-	private final Camera camera = new Camera();
-
+	private Camera camera = new Camera();
 
 	/** ordered list of render nodes */
-	private final IRenderCache renderCache = new RenderCache(new RootNode());
+	private IRenderCache renderCache;
 
 	/** set or semantic entities in this scene graph */
 	private final Set<IEntity> semanticView = new HashSet<IEntity>();
 
 	// this.spatialView = new TreeImpl<>(new BoundingVolumeSphere(new Vector3d(), 0));
+	
+	@Override
+	public void create() {
+		// everything that needs to be initialized in the render thread
+		renderCache = new RenderCache(new RootNode());
+	};
+	
 
 	@Override
 	public void setup(IEntity... entities) {

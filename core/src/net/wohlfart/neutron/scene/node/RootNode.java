@@ -40,6 +40,9 @@ public class RootNode implements INode {
 	
 	@Override
 	public void render(IRenderContext ctx, Iterable<ITree<INode>> children) {
+		assert ctx != null : "context is null";
+		assert shader != null : "shader is null";
+		assert ctx.getCamera() != null : "cam is null";
 	    ctx.setRenderConfig(IRenderConfig.CLEAR);
 	    ctx.begin(shader);
 		shader.setUniformMatrix("u_worldToClip", ctx.getCamera().getViewMatrix());

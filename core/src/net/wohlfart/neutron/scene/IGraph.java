@@ -56,6 +56,8 @@ public interface IGraph {
 
 	}
 
+	// called in the render thread
+	void create();
 
 	void setup(IEntity... entities);
 
