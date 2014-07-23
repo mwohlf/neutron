@@ -4,7 +4,7 @@ import java.util.HashSet;
 
 import net.wohlfart.neutron.scene.IGraph.INode;
 import net.wohlfart.neutron.scene.node.SimpleNode;
-import net.wohlfart.neutron.scene.util.NodeBuilder;
+import net.wohlfart.neutron.util.NodeBuilder;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.VertexAttribute;

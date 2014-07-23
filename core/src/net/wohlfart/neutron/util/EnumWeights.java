@@ -1,4 +1,4 @@
-package net.wohlfart.neutron.scene.util;
+package net.wohlfart.neutron.util;
 
 import com.badlogic.gdx.utils.ObjectIntMap;
 

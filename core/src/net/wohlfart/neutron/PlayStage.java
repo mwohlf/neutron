@@ -29,9 +29,9 @@ public class PlayStage implements IStage {
 	private RaySet raySet;
 	private InputMultiplexer input;
 
+	// running NOT in the render thread...
 	@Override
 	public IStage initialize() {
-		// running NOT in the render thread...
 		this.graph = new Graph();
 		this.keyboardInput = new KeyboardInput();
 		this.gestureInput = new GestureInput();
@@ -46,10 +46,10 @@ public class PlayStage implements IStage {
 	// called in the render thread
 	@Override
 	public void create() {
-		// initialize();		
+		// cam is not yet configured since it wasn't created on the render thread
 		this.ctx.getCamera().resizeViewport(
 				Gdx.graphics.getWidth(), 
-				Gdx.graphics.getHeight());		
+				Gdx.graphics.getHeight());
 		Gdx.input.setInputProcessor(input);
 		graph.create();
 		graph.setup(new IEntity[] {		

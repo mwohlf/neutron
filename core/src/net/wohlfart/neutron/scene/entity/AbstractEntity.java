@@ -5,7 +5,7 @@ import java.util.Set;
 import net.wohlfart.neutron.scene.IGraph;
 import net.wohlfart.neutron.scene.IGraph.IEntity;
 import net.wohlfart.neutron.scene.IGraph.INode;
-import net.wohlfart.neutron.scene.util.Vector3d;
+import net.wohlfart.neutron.util.Vector3d;
 
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;

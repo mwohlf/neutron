@@ -14,6 +14,8 @@ import net.wohlfart.neutron.scene.node.RootNode;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 
+
+// TODO: check https://github.com/libgdx/ashley/blob/master/ashley/src/com/badlogic/ashley/core/PooledEngine.java
 public class Graph implements IGraph, IUpdateable {
 
 	private Camera camera = new Camera();

@@ -3,7 +3,7 @@ package net.wohlfart.neutron.scene.entity;
 import java.util.Collections;
 
 import net.wohlfart.neutron.scene.IGraph.INode;
-import net.wohlfart.neutron.scene.util.NodeBuilder;
+import net.wohlfart.neutron.util.NodeBuilder;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

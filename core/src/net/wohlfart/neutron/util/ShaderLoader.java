@@ -1,4 +1,4 @@
-package net.wohlfart.neutron.scene.util;
+package net.wohlfart.neutron.util;
 
 import java.util.HashMap;
 import java.util.Map;

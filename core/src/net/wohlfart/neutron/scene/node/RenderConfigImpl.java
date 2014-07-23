@@ -1,6 +1,6 @@
 package net.wohlfart.neutron.scene.node;
 
-import net.wohlfart.neutron.scene.util.EnumWeights;
+import net.wohlfart.neutron.util.EnumWeights;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -248,7 +248,7 @@ public class RenderConfigImpl implements IRenderConfig<RenderConfigImpl> {
 			}
 			@Override
 			public void switchValue() {
-				Gdx.gl.glClearColor(0f, 0f, 0f, 0.5f);
+				Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
 			}
 		},
 		GREY {
@@ -258,7 +258,7 @@ public class RenderConfigImpl implements IRenderConfig<RenderConfigImpl> {
 			}
 			@Override
 			public void switchValue() {
-				Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
+				Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1f);
 			}
 		},
 		BLUE {
@@ -268,7 +268,7 @@ public class RenderConfigImpl implements IRenderConfig<RenderConfigImpl> {
 			}
 			@Override
 			public void switchValue() {
-				Gdx.gl.glClearColor(0.0f, 0.0f, 0.5f, 0.5f);
+				Gdx.gl.glClearColor(0.0f, 0.0f, 0.5f, 1f);
 			}
 		},
 		WHITE {
@@ -278,7 +278,17 @@ public class RenderConfigImpl implements IRenderConfig<RenderConfigImpl> {
 			}
 			@Override
 			public void switchValue() {
-				Gdx.gl.glClearColor(1f, 1f, 1f, 0.5f);
+				Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
+			}
+		},
+		RED {
+			@Override
+			public boolean isValueIn(RenderConfigImpl that) {
+				return (that.clearColor == WHITE);
+			}
+			@Override
+			public void switchValue() {
+				Gdx.gl.glClearColor(1f, 0f, 0f, 1f);
 			}
 		}
 	}

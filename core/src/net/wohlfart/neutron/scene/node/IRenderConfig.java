@@ -16,6 +16,22 @@ import net.wohlfart.neutron.scene.node.RenderConfigImpl.StencilTest;
 
 public interface IRenderConfig<T extends IRenderConfig<T>> {
 
+
+	public static final RenderConfigImpl CLEAR = new RenderConfigImpl(
+			Clear.ON,
+			Blending.OFF,
+			DepthTest.OFF,
+			PointSprites.OFF,
+			
+			ColorMask.ON,
+			ScissorTest.OFF,
+			StencilTest.OFF,
+			
+			ClearDepth.ONE,
+			ClearColor.RED,
+			FaceCulling.BACK);
+
+	
 	// this is for testing and debugging
 	public static final RenderConfigImpl DEFAULT = new RenderConfigImpl(
 			Clear.OFF,
@@ -29,21 +45,7 @@ public interface IRenderConfig<T extends IRenderConfig<T>> {
 			
 			ClearDepth.ONE,
 			ClearColor.IGNORE,
-			FaceCulling.OFF);
-
-	public static final RenderConfigImpl CLEAR = new RenderConfigImpl(
-			Clear.ON,
-			Blending.OFF,
-			DepthTest.OFF,
-			PointSprites.OFF,
-			
-			ColorMask.ON,
-			ScissorTest.OFF,
-			StencilTest.OFF,
-			
-			ClearDepth.ONE,
-			ClearColor.GREY,
-			FaceCulling.OFF);
+			FaceCulling.BACK);
 
 	public static final RenderConfigImpl BLENDING_ON = new RenderConfigImpl(
 			Clear.OFF,
@@ -99,7 +101,7 @@ public interface IRenderConfig<T extends IRenderConfig<T>> {
 			
 			ClearDepth.ONE,
 			ClearColor.IGNORE,
-			FaceCulling.OFF);
+			FaceCulling.BACK);
 
 	public static final RenderConfigImpl SPRITE_CLOUD = new RenderConfigImpl(
 			Clear.OFF,

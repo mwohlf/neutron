@@ -8,7 +8,7 @@ import net.wohlfart.neutron.scene.ITree;
 import net.wohlfart.neutron.scene.graph.ISortToken;
 import net.wohlfart.neutron.scene.graph.NodeSortStrategy;
 import net.wohlfart.neutron.scene.node.IRenderConfig;
-import net.wohlfart.neutron.scene.util.ShaderLoader;
+import net.wohlfart.neutron.util.ShaderLoader;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -126,6 +126,12 @@ public class Skybox implements IEntity {
 			shader.setUniformMatrix("u_worldToClip", ctx.getCamera().getViewMatrix());
 			shader.setUniformMatrix("u_modelToWorld", matrix);
 			Gdx.gl20.glEnable(GL20.GL_TEXTURE_2D);
+			// avoid border flickering, 
+			// see: http://www.opengl.org/discussion_boards/showthread.php/167808-2D-texture-problem-lines-between-textures
+			// Gdx.gl20.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_WRAP_S, GL20.GL_CLAMP_TO_EDGE );
+			// Gdx.gl20.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_WRAP_T, GL20.GL_CLAMP_TO_EDGE ); 
+			Gdx.gl20.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_WRAP_S, GL20.GL_REPEAT);
+			Gdx.gl20.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_WRAP_T, GL20.GL_REPEAT); 
 			texture.bind(0);
 			shader.setUniformi("u_texture", 0);
 			ctx.render(this, GL20.GL_TRIANGLE_FAN);

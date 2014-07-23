@@ -7,7 +7,7 @@ import net.wohlfart.neutron.scene.IRenderContext;
 import net.wohlfart.neutron.scene.ITree;
 import net.wohlfart.neutron.scene.graph.ISortToken;
 import net.wohlfart.neutron.scene.graph.NodeSortStrategy;
-import net.wohlfart.neutron.scene.util.ShaderLoader;
+import net.wohlfart.neutron.util.ShaderLoader;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;

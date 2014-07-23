@@ -1,6 +1,6 @@
 package net.wohlfart.neutron.scene.graph;
 
-import net.wohlfart.neutron.scene.util.Vector3d;
+import net.wohlfart.neutron.util.Vector3d;
 
 public class SortTokenImpl implements ISortToken {
 

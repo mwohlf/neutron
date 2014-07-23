@@ -12,11 +12,9 @@ public class Neutron implements ApplicationListener {
 	@Override
 	public void create() {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
-		switchState(new IntroStage());
-		createPlayState();
-		
-		// currentState = new PlayStage();
-		// currentState.create();
+		// switchState(new IntroStage());
+		switchState(new TestStage());
+		//createPlayState();
 	}
 
 	@Override
@@ -45,8 +43,7 @@ public class Neutron implements ApplicationListener {
 	}
 	
 	/**
-	 * calls dispose on the old stage and create on the new stage
-	 * 
+	 * call dispose() on the old stage and create() on the new stage
 	 */
 	private void switchState(IStage newState) {
 		currentState.dispose();

@@ -1,10 +1,12 @@
-package net.wohlfart.neutron.scene.event;
+package net.wohlfart.neutron.event;
+
 
 // can't use annotations in android
 // we need something like GWT's event bus
 // see: http://stackoverflow.com/questions/6030202/how-to-use-the-gwt-eventbus
 public interface IEventBus<T> {
-
+	
+	
     void register(Object subscriber);
     
     void unregister(Object subscriber);
