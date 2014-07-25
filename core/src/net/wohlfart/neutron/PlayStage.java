@@ -5,11 +5,8 @@ import net.wohlfart.neutron.input.KeyboardInput;
 import net.wohlfart.neutron.scene.ICamera;
 import net.wohlfart.neutron.scene.IGraph.IEntity;
 import net.wohlfart.neutron.scene.IRenderContext;
-import net.wohlfart.neutron.scene.entity.Cube;
-import net.wohlfart.neutron.scene.entity.Pointsprites;
-import net.wohlfart.neutron.scene.entity.Quad;
+import net.wohlfart.neutron.scene.entity.ObjModel;
 import net.wohlfart.neutron.scene.entity.RaySet;
-import net.wohlfart.neutron.scene.entity.Skybox;
 import net.wohlfart.neutron.scene.graph.Graph;
 import net.wohlfart.neutron.scene.node.RenderContext;
 
@@ -52,8 +49,8 @@ public class PlayStage implements IStage {
 				Gdx.graphics.getHeight());
 		Gdx.input.setInputProcessor(input);
 		graph.create();
-		graph.setup(new IEntity[] {		
-				raySet,					
+		graph.setup(new IEntity[] {		/*
+		  		raySet,					
 			    new Skybox(),			
 			    new Quad().withPosition(0, 0, -100),
 				new Quad().withPosition(1, 0, -200),
@@ -61,8 +58,9 @@ public class PlayStage implements IStage {
 				new Quad().withPosition(3, 2, -400),
 				new Quad().withPosition(2, 4, -500),
 				new Quad().withPosition(1, 6, -600), 		
-				new Cube().withPosition(5,2,-50),								
-				new Pointsprites(),						
+			    new Cube().withPosition(5,2,-50),								
+				new Pointsprites(), */
+				new ObjModel().withPosition(0, 0, -20),
 		});
 	}
 

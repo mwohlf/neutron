@@ -15,6 +15,8 @@ public class KeyboardInput implements InputProcessor {
 
 	float MOV_SPEED = 0.7f;
 	float ROT_SPEED = 0.6f;
+	float SCROLL_SPEED = 1.2f;
+	float MOUSE_SPEED = 0.6f;
 
 	private Vector3 mov = new Vector3();
 	private Quaternion rot = new Quaternion();
@@ -98,12 +100,15 @@ public class KeyboardInput implements InputProcessor {
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
-		return false;
+//		rot.setFromAxis(Vector3.Y, screenX * MOUSE_SPEED);
+//		rot.setFromAxis(Vector3.X, screenY * MOUSE_SPEED);
+		return true;
 	}
 
 	@Override
 	public boolean scrolled(int amount) {
-		return false;
+		mov.z =+ (float)amount * SCROLL_SPEED;
+		return true;
 	}
 
 

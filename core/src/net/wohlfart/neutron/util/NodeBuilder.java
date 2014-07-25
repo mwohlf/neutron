@@ -5,6 +5,7 @@ import java.util.Iterator;
 
 import net.wohlfart.neutron.scene.graph.ISortToken;
 import net.wohlfart.neutron.scene.node.SimpleNode;
+import net.wohlfart.neutron.shader.ShaderLoader;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;

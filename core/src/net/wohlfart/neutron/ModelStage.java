@@ -13,7 +13,7 @@ import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.loader.ObjLoader;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 
-public class TestStage implements IStage {
+public class ModelStage implements IStage {
 
 	private Model model;
 	private ModelInstance instance;

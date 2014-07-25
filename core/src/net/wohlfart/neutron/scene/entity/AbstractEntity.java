@@ -31,10 +31,11 @@ public abstract class AbstractEntity implements IEntity {
 
 	@Override
 	public void update(Quaternion rot, Vector3 mov) {
-		// updating position and rotation
+		// updating position and rotation of this entity
 		rotation.mulLeft(rot);
 		tmpRot.set(rotation);
 		position.add(tmpRot.conjugate().transform(tmpMov.set(mov)));
+		
 		// updating the nodes with the new pos/rot
 		for (INode node : nodes) {
 			final Matrix4 matrix = node.getModel2World();

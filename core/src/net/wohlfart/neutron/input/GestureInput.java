@@ -50,6 +50,7 @@ public class GestureInput implements GestureListener {
 
 	@Override
 	public boolean touchDown(float x, float y, int pointer, int button) {
+		
 		Gdx.app.debug("input", "touchDown called: (" + x + "/" + y + ") pointer: " + pointer + " button: " + button);
 		return false;
 	}

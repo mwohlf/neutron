@@ -4,6 +4,8 @@ import net.wohlfart.neutron.scene.ICamera;
 import net.wohlfart.neutron.scene.IRenderContext;
 
 import com.badlogic.gdx.graphics.Mesh;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 public class RenderContext implements IRenderContext {
@@ -35,6 +37,12 @@ public class RenderContext implements IRenderContext {
 	@Override
 	public void render(Mesh mesh, int primFormat) {
 		mesh.render(currentShader, primFormat);
+	}
+
+	@Override
+	public void render(ModelInstance model) {
+		Renderable renderable = model.getRenderable(new Renderable());
+		renderable.mesh.render(currentShader, renderable.primitiveType);
 	}
 
 	@Override

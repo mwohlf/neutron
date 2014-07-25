@@ -3,6 +3,7 @@ package net.wohlfart.neutron.scene;
 import net.wohlfart.neutron.scene.node.RenderConfigImpl;
 
 import com.badlogic.gdx.graphics.Mesh;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 
@@ -15,6 +16,8 @@ public interface IRenderContext {
 	ICamera getCamera();
 
 	void setRenderConfig(RenderConfigImpl newRenderConfig);
+
+	void render(ModelInstance model);
 
 	void render(Mesh mesh, int primFormat);
 

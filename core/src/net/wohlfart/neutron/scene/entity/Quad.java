@@ -1,8 +1,9 @@
 package net.wohlfart.neutron.scene.entity;
 
-import java.util.Collections;
+import java.util.HashSet;
 
 import net.wohlfart.neutron.scene.IGraph.INode;
+import net.wohlfart.neutron.scene.node.SimpleNode;
 import net.wohlfart.neutron.util.NodeBuilder;
 
 import com.badlogic.gdx.Gdx;
@@ -16,7 +17,7 @@ public class Quad extends AbstractEntity {
 
 	@Override
 	public void initNodes() {
-		nodes = Collections.singleton((INode) new NodeBuilder()
+		SimpleNode node = new NodeBuilder()
 			.useAttributes(new VertexAttributes(
 					new VertexAttribute(Usage.Position, 3, ShaderProgram.POSITION_ATTRIBUTE),
 					new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE),
@@ -24,7 +25,11 @@ public class Quad extends AbstractEntity {
 		    .useShader("default")
 		    .useSize(5f)
 		    .useTexture(new Texture(Gdx.files.internal("badlogic.jpg")))
-			.createQuad("quad"));
+			.createQuad("quad");
+		
+		node.getModel2World().setTranslation(position.getX(), position.getY(), position.getZ());
+		nodes = new HashSet<INode>();
+		nodes.add(node);
 	}
 
 }
