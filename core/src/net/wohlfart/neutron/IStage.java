@@ -4,11 +4,16 @@ import com.badlogic.gdx.ApplicationListener;
 
 public interface IStage extends ApplicationListener {
 
-	IStage initialize();
+	IStage prepare();
 	
 	
 	public final static IStage NULL = new IStage() {
 
+		@Override
+		public IStage prepare() {
+			return this;
+		}
+		
 		@Override
 		public void create() {}
 
@@ -27,11 +32,6 @@ public interface IStage extends ApplicationListener {
 		@Override
 		public void dispose() {}
 
-		@Override
-		public IStage initialize() {
-			return null;
-		}
-		
 	};
 	
 

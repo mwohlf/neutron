@@ -33,9 +33,9 @@ class Camera implements ICamera {
 	/** the inverse combined projection and view matrix **/
 	public final Matrix4 invProjectionView = new Matrix4();
 
-	public float near = 1;
+	public float near = 10;
 
-	public float far = 100;
+	public float far = 1000;
 
 	/** the viewport width **/
 	public float viewportWidth = 0;

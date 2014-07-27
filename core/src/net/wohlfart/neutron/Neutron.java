@@ -12,9 +12,8 @@ public class Neutron implements ApplicationListener {
 	@Override
 	public void create() {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
-		// switchState(new IntroStage());
-		switchState(new IntroStage());
-		createPlayState();
+		switchState(new ModelStage());
+		// createPlayState();
 	}
 
 	@Override
@@ -62,7 +61,7 @@ public class Neutron implements ApplicationListener {
 			public void run() {
 				// running NOT in the render thread
 				final PlayStage playStage = new PlayStage();
-				playStage.initialize();
+				playStage.prepare();
 				Gdx.app.postRunnable(new Runnable() {
 					@Override
 					public void run() {
