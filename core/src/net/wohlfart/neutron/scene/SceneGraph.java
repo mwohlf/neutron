@@ -5,13 +5,14 @@ import java.util.Set;
 
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
-import com.badlogic.gdx.graphics.g3d.RenderableProvider;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultRenderableSorter;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultShaderProvider;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultTextureBinder;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
+import com.badlogic.gdx.math.Quaternion;
+import com.badlogic.gdx.math.Vector3;
 
 
 /**
@@ -29,7 +30,7 @@ public class SceneGraph {
 	private final ModelBatch batch;
 	
 	
-	private final Set<RenderableProvider> models = new HashSet<RenderableProvider>();
+	private final Set<Entity> renderableProviders = new HashSet<Entity>();
 	
 	
 	public SceneGraph() {
@@ -49,18 +50,31 @@ public class SceneGraph {
 					new DefaultRenderableSorter());	
 	}
 	
+	public void update(Quaternion rotation, Vector3 translation) {
+
+	    for (Entity provider : renderableProviders) {
+			provider.update(rotation, translation);
+		}
+	}
+
+
+	
 	public void render() {
 		batch.begin(cam);
-		batch.render(models);
+		batch.render(renderableProviders, environment);
 		batch.end();
 	}
 
-	public void add(RenderableProvider model) {
-		models.add(model);
+	public void add(Entity... providers) {
+		for (Entity provider : providers) {
+			renderableProviders.add(provider);
+		}
 	}
 	
-	public void remove(RenderableProvider model) {
-		models.remove(model);
+	public void remove(Entity... providers) {
+		for (Entity provider : providers) {
+			renderableProviders.remove(provider);
+		}
 	}
 	
 }

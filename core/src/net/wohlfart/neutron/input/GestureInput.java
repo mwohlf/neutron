@@ -1,7 +1,5 @@
 package net.wohlfart.neutron.input;
 
-import net.wohlfart.neutron.scene.IUpdateable;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Quaternion;
@@ -27,30 +25,22 @@ public class GestureInput implements GestureListener {
 	private Quaternion rotx = new Quaternion().idt();
 	private Quaternion roty = new Quaternion().idt();
 
+	private final InputQueue inputQueue;
+
 
 	// TODO: implement state pattern to handle input actions differently depending on the current state
 	// e.g. when rotating a tap causes rotation to stop, when not rotating a tap causes a move...
 
-	public void update(IUpdateable updateable) {
-		updateable.update(rot, mov);
-		slowdown();
+	public GestureInput(InputQueue inputQueue) {
+		this.inputQueue = inputQueue;
 	}
 	
 	public Vector2 getPickPosition() {
 		return pick;
 	}
 
-	private void slowdown() {
-		if (rot.isIdentity(EPSILON)) {
-			rot.idt();
-		} else {
-			rot.slerp(IDT_QUATERNION, 0.01f);
-		}
-	}
-
 	@Override
-	public boolean touchDown(float x, float y, int pointer, int button) {
-		
+	public boolean touchDown(float x, float y, int pointer, int button) {		
 		Gdx.app.debug("input", "touchDown called: (" + x + "/" + y + ") pointer: " + pointer + " button: " + button);
 		return false;
 	}

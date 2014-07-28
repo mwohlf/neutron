@@ -4,9 +4,12 @@ import com.badlogic.gdx.ApplicationListener;
 
 public interface IStage extends ApplicationListener {
 
+	// this method might be run async to do some heavy loading
+	// for this stage
 	IStage prepare();
 	
 	
+		
 	public final static IStage NULL = new IStage() {
 
 		@Override
@@ -33,6 +36,7 @@ public interface IStage extends ApplicationListener {
 		public void dispose() {}
 
 	};
-	
 
+
+	
 }

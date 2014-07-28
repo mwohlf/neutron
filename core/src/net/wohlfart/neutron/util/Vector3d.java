@@ -52,7 +52,15 @@ public class Vector3d {
 		length2 = Double.NaN;
 		return this;
 	}
-	
+
+	public Vector3d add(double xx, double yy, double zz) {
+        this.x += xx;
+        this.y += yy;
+        this.z += zz;
+		length2 = Double.NaN;
+		return this;
+	}
+
 	public Vector3d set(double x, double y, double z) {
 		this.x = x;
 		this.y = y;

@@ -1,5 +1,8 @@
 package net.wohlfart.neutron;
 
+import net.wohlfart.neutron.stage.IntroStage;
+import net.wohlfart.neutron.stage.ModelStage;
+
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -7,13 +10,13 @@ import com.badlogic.gdx.Gdx;
 public class Neutron implements ApplicationListener {
 
 	private IStage currentState = IStage.NULL;
-	private PlayStage playStage;
+	
 
 	@Override
 	public void create() {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
-		switchState(new ModelStage());
-		// createPlayState();
+		switchState(new IntroStage());
+		createNextState();
 	}
 
 	@Override
@@ -50,26 +53,23 @@ public class Neutron implements ApplicationListener {
 		currentState.create();
 	}
 	
-	private void setPlayStage(PlayStage playStage) {
-		this.playStage = playStage;
-		switchState(playStage);
-	}
 
-	private void createPlayState() {
+	private void createNextState() {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				// running NOT in the render thread
-				final PlayStage playStage = new PlayStage();
-				playStage.prepare();
+				final ModelStage nextStage = new ModelStage();
+				nextStage.prepare();
 				Gdx.app.postRunnable(new Runnable() {
 					@Override
 					public void run() {
 						// running in the render thread
-						setPlayStage(playStage);
+						switchState(nextStage);
 					}
 				});
 			}
 		}).start();
 	}
+	
 }

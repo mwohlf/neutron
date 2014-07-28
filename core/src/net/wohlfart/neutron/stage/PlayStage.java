@@ -1,7 +1,8 @@
-package net.wohlfart.neutron;
+package net.wohlfart.neutron.stage;
 
+import net.wohlfart.neutron.IStage;
+import net.wohlfart.neutron.input.ControllerInput;
 import net.wohlfart.neutron.input.GestureInput;
-import net.wohlfart.neutron.input.KeyboardInput;
 import net.wohlfart.neutron.scene.ICamera;
 import net.wohlfart.neutron.scene.IGraph.IEntity;
 import net.wohlfart.neutron.scene.IRenderContext;
@@ -12,11 +13,9 @@ import net.wohlfart.neutron.scene.entity.Quad;
 import net.wohlfart.neutron.scene.entity.RaySet;
 import net.wohlfart.neutron.scene.entity.Skybox;
 import net.wohlfart.neutron.scene.graph.Graph;
-import net.wohlfart.neutron.scene.node.RenderContext;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.collision.Ray;
 
@@ -24,7 +23,7 @@ import com.badlogic.gdx.math.collision.Ray;
 public class PlayStage implements IStage {
 
 	private Graph graph;
-	private KeyboardInput keyboardInput;
+	private ControllerInput keyboardInput;
 	private GestureInput gestureInput;
 		
 	private IRenderContext ctx;
@@ -35,12 +34,7 @@ public class PlayStage implements IStage {
 	@Override
 	public IStage prepare() {
 		this.graph = new Graph();
-		this.keyboardInput = new KeyboardInput();
-		this.gestureInput = new GestureInput();
-		this.ctx = new RenderContext(graph.getCamera());
-		this.input = new InputMultiplexer(
-				keyboardInput, 
-				new GestureDetector(gestureInput));
+
 		raySet = new RaySet();		
 		return this;
 	}
@@ -83,8 +77,8 @@ public class PlayStage implements IStage {
 	
 	private void processInputs() {
 		// process pending user input
-		keyboardInput.update(graph);
-		gestureInput.update(graph);
+		//keyboardInput.update(graph);
+		//gestureInput.update(graph);
 		
 		Vector2 pick = gestureInput.getPickPosition();
 		if (!Float.isNaN(pick.x) && !Float.isNaN(pick.y)) {
